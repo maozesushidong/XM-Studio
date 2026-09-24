@@ -1,0 +1,22 @@
+name: xmai-client-download-service
+
+services:
+  download:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: xmai-client-download-service:2.0.0-file-library
+    container_name: xmai-client-download-service
+    restart: unless-stopped
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8080
+      DATA_ROOT: /data
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://47.96.184.148/xmai-download}
+      MAX_UPLOAD_BYTES: 2147483648
+      CHUNK_SIZE: 8388608
+    ports:
+      - "127.0.0.1:18093:8080"
+    volumes:
+      - ./data:/data

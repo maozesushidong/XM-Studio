@@ -1,0 +1,13 @@
+{
+  "productVersion": "2.3.0.1",
+  "reviewStatus": "pending_product_confirmation",
+  "sourceRefs": ["PRD.md:7.1", "renderer/app.js:renderPageView", "electron/main.js:getDesktopTelemetryConfig"],
+  "capabilities": [
+    {"capabilityId":"ai-chat","name":"AI 对话","status":"unknown","supportedScenarios":["自然语言对话与连续追问"],"limitations":["当前材料不足以确认所有模型与权限下的可用范围"],"entry":null,"lastVerifiedAt":null},
+    {"capabilityId":"skill-library","name":"技能库","status":"unknown","supportedScenarios":["个人技能、企业技能和在线市场"],"limitations":["安装来源与当前环境的实际可用性需逐项核验"],"entry":null,"lastVerifiedAt":null},
+    {"capabilityId":"browser-tasks","name":"浏览器操作","status":"unknown","supportedScenarios":["经授权的浏览器任务"],"limitations":["网站登录、页面结构与授权范围影响实际执行"],"entry":null,"lastVerifiedAt":null},
+    {"capabilityId":"prompt-library","name":"提示词库","status":"unknown","supportedScenarios":["查询和使用公共提示词"],"limitations":["依赖外部提示词资源接口"],"entry":null,"lastVerifiedAt":null},
+    {"capabilityId":"automations","name":"自动化","status":"unknown","supportedScenarios":["客户端常驻时的计划任务"],"limitations":["不代表支持客户端退出后的云端执行"],"entry":null,"lastVerifiedAt":null},
+    {"capabilityId":"requirement-intake","name":"需求提报","status":"prototype","supportedScenarios":["AI Studio 自身需求分析、草稿、提交与导出"],"limitations":["测试环境接入中，尚未正式发布"],"entry":null,"lastVerifiedAt":null}
+  ]
+}

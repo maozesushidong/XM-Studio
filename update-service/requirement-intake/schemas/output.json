@@ -1,0 +1,914 @@
+{
+  "$id": "https://xmai.local/schemas/requirement-intake/output/1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "requestId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "assistantMessage": {
+      "type": "string",
+      "maxLength": 12000
+    },
+    "responseType": {
+      "type": "string",
+      "enum": [
+        "question",
+        "stage_summary",
+        "final_summary",
+        "existing_capability",
+        "out_of_scope",
+        "conditional_result",
+        "error"
+      ]
+    },
+    "analysisStage": {
+      "type": "string",
+      "enum": [
+        "capability_checking",
+        "analyzing",
+        "stage_review",
+        "summary_review",
+        "closed_out_of_scope"
+      ]
+    },
+    "analysisFocus": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "real_problem",
+            "role_scenario",
+            "current_workflow",
+            "impact_evidence",
+            "expected_outcome",
+            "scope_branches",
+            "success_criteria",
+            "constraints_risks"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "confirmedFacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "factId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "dimension": {
+            "type": "string",
+            "enum": [
+              "real_problem",
+              "role_scenario",
+              "current_workflow",
+              "impact_evidence",
+              "expected_outcome",
+              "scope_branches",
+              "success_criteria",
+              "constraints_risks"
+            ]
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 12000
+          },
+          "sourceTurnIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "maxItems": 200,
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "confirmed",
+              "corrected",
+              "invalidated"
+            ]
+          }
+        },
+        "required": [
+          "factId",
+          "dimension",
+          "text",
+          "sourceTurnIds",
+          "status"
+        ]
+      },
+      "maxItems": 200
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 12000
+          },
+          "sourceTurnIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "maxItems": 200
+          }
+        },
+        "required": [
+          "id",
+          "text",
+          "sourceTurnIds"
+        ]
+      },
+      "maxItems": 200
+    },
+    "openQuestions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "dimension": {
+            "type": "string",
+            "enum": [
+              "real_problem",
+              "role_scenario",
+              "current_workflow",
+              "impact_evidence",
+              "expected_outcome",
+              "scope_branches",
+              "success_criteria",
+              "constraints_risks"
+            ]
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 12000
+          },
+          "blocking": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "dimension",
+          "text",
+          "blocking"
+        ]
+      },
+      "maxItems": 200
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 12000
+          },
+          "blocking": {
+            "type": "boolean"
+          },
+          "resolved": {
+            "type": "boolean"
+          },
+          "sourceTurnIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "maxItems": 200,
+            "minItems": 1,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "text",
+          "blocking",
+          "resolved",
+          "sourceTurnIds"
+        ]
+      },
+      "maxItems": 200
+    },
+    "branches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "branchId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "inScope": {
+            "type": "boolean"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 12000
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "branchId",
+          "title",
+          "inScope",
+          "reason"
+        ]
+      },
+      "maxItems": 200
+    },
+    "capabilityAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dataStatus": {
+          "type": "string",
+          "enum": [
+            "available",
+            "stale",
+            "unavailable",
+            "error"
+          ]
+        },
+        "capabilityVersion": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 12000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "relation": {
+          "type": "string",
+          "enum": [
+            "directly_supported",
+            "partially_supported",
+            "not_supported",
+            "unknown"
+          ]
+        },
+        "matchedCapabilityIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "maxItems": 200
+        },
+        "gap": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 12000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "uncertainty": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 12000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "dataStatus",
+        "capabilityVersion",
+        "relation",
+        "matchedCapabilityIds",
+        "gap",
+        "uncertainty"
+      ]
+    },
+    "completeness": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "score": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "real_problem": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "missing",
+                    "partial",
+                    "confirmed",
+                    "explicit_gap"
+                  ]
+                },
+                "gap": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 12000
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "status",
+                "gap"
+              ]
+            },
+            "role_scenario": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "missing",
+                    "partial",
+                    "confirmed",
+                    "explicit_gap"
+                  ]
+                },
+                "gap": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 12000
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "status",
+                "gap"
+              ]
+            },
+            "current_workflow": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "missing",
+                    "partial",
+                    "confirmed",
+                    "explicit_gap"
+                  ]
+                },
+                "gap": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 12000
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "status",
+                "gap"
+              ]
+            },
+            "impact_evidence": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "missing",
+                    "partial",
+                    "confirmed",
+                    "explicit_gap"
+                  ]
+                },
+                "gap": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 12000
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "status",
+                "gap"
+              ]
+            },
+            "expected_outcome": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "missing",
+                    "partial",
+                    "confirmed",
+                    "explicit_gap"
+                  ]
+                },
+                "gap": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 12000
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "status",
+                "gap"
+              ]
+            },
+            "scope_branches": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "missing",
+                    "partial",
+                    "confirmed",
+                    "explicit_gap"
+                  ]
+                },
+                "gap": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 12000
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "status",
+                "gap"
+              ]
+            },
+            "success_criteria": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "missing",
+                    "partial",
+                    "confirmed",
+                    "explicit_gap"
+                  ]
+                },
+                "gap": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 12000
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "status",
+                "gap"
+              ]
+            }
+          },
+          "required": [
+            "real_problem",
+            "role_scenario",
+            "current_workflow",
+            "impact_evidence",
+            "expected_outcome",
+            "scope_branches",
+            "success_criteria"
+          ]
+        },
+        "gatePassed": {
+          "type": "boolean"
+        },
+        "blockingItems": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 12000
+          },
+          "maxItems": 200
+        }
+      },
+      "required": [
+        "score",
+        "dimensions",
+        "gatePassed",
+        "blockingItems"
+      ]
+    },
+    "recommendation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "submit",
+            "supplement",
+            "not_recommended",
+            "not_applicable"
+          ]
+        },
+        "reasonCodes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "CAPABILITY_GAP_CONFIRMED",
+              "CAPABILITY_DIRECTLY_SOLVES",
+              "CAPABILITY_UNKNOWN",
+              "MISSING_REAL_SCENARIO",
+              "MISSING_CURRENT_WORKFLOW",
+              "MISSING_SUCCESS_CRITERIA",
+              "SCOPE_CONFLICT",
+              "DUPLICATE_WITHOUT_DELTA",
+              "VALUE_EVIDENCE_WEAK",
+              "RISK_DEPENDENCY_HIGH",
+              "OUT_OF_AI_STUDIO_SCOPE"
+            ]
+          },
+          "maxItems": 200,
+          "uniqueItems": true
+        },
+        "explanation": {
+          "type": "string",
+          "maxLength": 12000
+        }
+      },
+      "required": [
+        "type",
+        "reasonCodes",
+        "explanation"
+      ]
+    },
+    "draftSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 12000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "originalRequest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 12000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "realProblem": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 12000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rolesAndScenario": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 12000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "currentWorkflow": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 12000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bottleneck": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 12000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "impactAndEvidence": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 12000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "expectedOutcome": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 12000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "successCriteria": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 12000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "inScope": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 12000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "outOfScope": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 12000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "dependencies": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 12000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "risks": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 12000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "validationPlan": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 12000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "title",
+        "originalRequest",
+        "realProblem",
+        "rolesAndScenario",
+        "currentWorkflow",
+        "bottleneck",
+        "impactAndEvidence",
+        "expectedOutcome",
+        "successCriteria",
+        "inScope",
+        "outOfScope",
+        "dependencies",
+        "risks",
+        "validationPlan"
+      ]
+    },
+    "solutionProposal": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "direction": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 12000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "mvpScope": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 12000
+          },
+          "maxItems": 200
+        },
+        "excludedScope": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 12000
+          },
+          "maxItems": 200
+        }
+      },
+      "required": [
+        "direction",
+        "mvpScope",
+        "excludedScope"
+      ]
+    },
+    "allowedUiActions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "answer",
+          "correct",
+          "accept_stage_summary",
+          "continue_gap",
+          "retry_capability",
+          "confirm_summary",
+          "save_draft",
+          "insist_submit",
+          "close_resolved",
+          "close_out_of_scope"
+        ]
+      },
+      "maxItems": 200,
+      "uniqueItems": true
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 1000
+      },
+      "maxItems": 200
+    },
+    "stateVersion": {
+      "type": "integer",
+      "minimum": 1
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "requestId",
+    "assistantMessage",
+    "responseType",
+    "analysisStage",
+    "analysisFocus",
+    "confirmedFacts",
+    "assumptions",
+    "openQuestions",
+    "conflicts",
+    "branches",
+    "capabilityAssessment",
+    "completeness",
+    "recommendation",
+    "draftSummary",
+    "solutionProposal",
+    "allowedUiActions",
+    "warnings",
+    "stateVersion"
+  ]
+}

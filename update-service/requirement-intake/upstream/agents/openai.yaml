@@ -1,0 +1,4 @@
+interface:
+  display_name: "先马需求分析"
+  short_description: "澄清钉钉业务诉求；直接Codex沟通默认不入需求池"
+  default_prompt: "使用 $xianma-requirement-analysis 先判定来源渠道。只有钉钉业务需求机器人渠道在业务确认后自动创建REQ并进入数智审核；用户与Codex直接沟通默认不创建REQ、不通知，除非本轮明确要求纳入需求池。"

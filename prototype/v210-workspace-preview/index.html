@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XMAI Studio V2.1.0 - 整体交互预览</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">X</div>
+        <div>
+          <strong>XMAI Studio</strong>
+          <span>测试工作台</span>
+        </div>
+      </div>
+
+      <nav class="primary-nav" aria-label="主导航">
+        <button type="button" data-view="chat">
+          <i data-lucide="square-pen" aria-hidden="true"></i><span>新对话</span>
+        </button>
+        <button type="button">
+          <i data-lucide="search" aria-hidden="true"></i><span>搜索</span>
+        </button>
+        <button type="button">
+          <i data-lucide="sparkles" aria-hidden="true"></i><span>技能库</span>
+        </button>
+        <button type="button">
+          <i data-lucide="lightbulb" aria-hidden="true"></i><span>提示词库</span>
+        </button>
+        <button type="button" data-view="tasks">
+          <i data-lucide="calendar-clock" aria-hidden="true"></i><span>定时任务</span>
+          <span class="nav-count">4</span>
+        </button>
+        <button type="button" class="active" data-view="requirement">
+          <i data-lucide="clipboard-pen-line" aria-hidden="true"></i><span>需求提报</span>
+          <span class="nav-dot" aria-label="有未完成草稿"></span>
+        </button>
+      </nav>
+
+      <section class="sidebar-section" aria-label="最近项目">
+        <p>项目</p>
+        <strong>运营工作</strong>
+        <button type="button"><span>本周周报生成</span><small>刚刚</small></button>
+        <button type="button"><span>618 活动文案润色</span><small>2 小时</small></button>
+        <button type="button"><span>周会会议记录整理</span><small>昨天</small></button>
+        <strong>设计工作</strong>
+        <button type="button"><span>产品图批量去背景</span><small>1 周</small></button>
+        <button type="button"><span>详情页图片格式转换</span><small>1 周</small></button>
+      </section>
+
+      <div class="account">
+        <span class="avatar">梦</span>
+        <div><strong>梦蝶</strong><small>数智中心</small></div>
+        <button type="button" aria-label="账户设置"><i data-lucide="ellipsis" aria-hidden="true"></i></button>
+      </div>
+    </aside>
+
+    <main id="app" class="app-main" tabindex="-1"></main>
+  </div>
+
+  <div id="overlay-root"></div>
+  <div id="toast-root" class="toast-root" aria-live="polite"></div>
+
+  <script src="../skill-library-v11-preview/vendor/lucide.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

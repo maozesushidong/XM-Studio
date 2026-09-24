@@ -1,0 +1,71 @@
+# Dependencies and generated applications
+node_modules/
+dist/
+dist-*/
+交付/
+
+# Build cache and downloaded runtimes
+build/*
+!build/icon.png
+!build/icon.ico
+!build/先马智能体安装器.iss
+!build/runtime-tools/
+build/runtime-tools/*
+!build/runtime-tools/windows-ui-automation.ps1
+!build/runtime-tools/7zip-LICENSE.txt
+!build/runtime-archive/
+!build/runtime-archive/**
+!build/runtime-tools/
+!build/runtime-tools/**
+!build/node-runtime/
+!build/node-runtime/**
+!build/requirement-preview-installer.iss
+!build/v11-preview-signing-public.pem
+!build/v11-preview-build.json
+!build/v11-preview-deployment.json
+
+# Local browser and test output
+.playwright-cli/
+*.log
+*-check.png
+installer-*.png
+smoke-*.png
+workorder-home.png
+workorder-home.yml
+
+# Local credentials and deployment state
+.env
+.env.*
+!.env.example
+*.key
+*private*.pem
+electron/bundled-ai-credential.json
+electron/bundled-ai-key-part.json
+electron/bundled-dingtalk-credential.json
+electron/bundled-dingtalk-key-part.json
+update-service/data/
+update-service/uploads/
+update-service/releases/
+update-service/.publish-upload-state.json
+mit/private.py
+
+# Installers and archives must use the release/update server
+*.exe
+*.msi
+*.asar
+*.zip
+*.rar
+*.7z
+!release-assets/
+!release-assets/**
+
+# Editor and OS state
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/
+*.tmp
+*.bak

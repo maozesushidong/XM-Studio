@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>先马·AI Studio 管理后台</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; color: #171717; background: #f6f7f8; font-family: "Microsoft YaHei", "PingFang SC", sans-serif; }
+    button, input, select, textarea { font: inherit; letter-spacing: 0; }
+    header { height: 64px; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; color: white; background: #1d252c; }
+    header strong { font-size: 18px; }
+    header span { color: #cbd3d9; font-size: 13px; }
+    main { width: min(1120px, calc(100% - 32px)); margin: 28px auto 60px; }
+    .toolbar { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: end; padding-bottom: 24px; border-bottom: 1px solid #dfe3e6; }
+    .field { display: grid; gap: 7px; min-width: 0; }
+    label { color: #4d5961; font-size: 13px; font-weight: 600; }
+    input, select, textarea { width: 100%; min-height: 40px; padding: 9px 11px; border: 1px solid #cdd3d7; border-radius: 6px; color: #171717; background: white; outline: none; }
+    input:focus, select:focus, textarea:focus { border-color: #26846d; box-shadow: 0 0 0 3px rgba(38,132,109,.12); }
+    textarea { min-height: 132px; resize: vertical; line-height: 1.6; }
+    button { min-height: 40px; padding: 0 16px; border: 1px solid transparent; border-radius: 6px; cursor: pointer; }
+    button:disabled { cursor: not-allowed; opacity: .55; }
+    .primary { color: white; background: #18705c; }
+    .secondary { color: #243039; border-color: #cdd3d7; background: white; }
+    .danger { color: #a52c2c; border-color: #e2bcbc; background: white; }
+    .publish { padding: 26px 0 30px; border-bottom: 1px solid #dfe3e6; }
+    h1, h2 { margin: 0; letter-spacing: 0; }
+    h1 { font-size: 24px; }
+    h2 { font-size: 18px; }
+    .section-head { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 20px; }
+    .section-head p { margin: 5px 0 0; color: #68747c; font-size: 13px; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .field.wide { grid-column: 1 / -1; }
+    .check { display: flex; align-items: center; gap: 9px; color: #303b42; font-size: 14px; }
+    .check input { width: 16px; min-height: 16px; margin: 0; }
+    .publish-actions { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 18px; }
+    .status { min-height: 22px; color: #58656d; font-size: 13px; }
+    .status.error { color: #b02c2c; }
+    .upload-note { margin: 7px 0 0; color: #68747c; font-size: 12px; line-height: 1.5; }
+    progress { width: 100%; height: 8px; margin-top: 12px; accent-color: #18705c; }
+    .history { padding-top: 28px; }
+    table { width: 100%; border-collapse: collapse; background: white; border: 1px solid #dfe3e6; }
+    th, td { padding: 12px 14px; border-bottom: 1px solid #e7eaec; text-align: left; font-size: 13px; vertical-align: top; }
+    th { color: #526069; background: #f1f3f4; font-weight: 600; }
+    td strong { display: block; margin-bottom: 4px; }
+    td small { color: #7a858c; }
+    .tag { display: inline-flex; align-items: center; min-height: 24px; padding: 0 8px; border-radius: 4px; color: #17644f; background: #e4f1ed; font-size: 12px; }
+    .tag.revoked { color: #7e3b3b; background: #f4e9e9; }
+    .tag.deleted { color: #5f666b; background: #eceeef; }
+    .release-actions { display: flex; align-items: center; gap: 7px; }
+    .empty { padding: 30px; color: #78838a; text-align: center; background: white; border: 1px solid #dfe3e6; }
+    .tabs { display: flex; gap: 6px; padding: 18px 0 0; border-bottom: 1px solid #dfe3e6; }
+    .tab { min-height: 38px; padding: 0 14px; border: 0; border-bottom: 3px solid transparent; border-radius: 0; color: #5c6870; background: transparent; }
+    .tab.active { color: #17644f; border-bottom-color: #18705c; font-weight: 700; }
+    .telemetry { padding: 26px 0 30px; }
+    .metric-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-bottom: 24px; }
+    .metric { min-height: 96px; padding: 16px; border: 1px solid #dfe3e6; background: white; }
+    .metric span { display: block; color: #68747c; font-size: 12px; }
+    .metric strong { display: block; margin-top: 10px; font-size: 28px; line-height: 1; }
+    .telemetry-tools { display: grid; grid-template-columns: minmax(240px, 1fr) auto auto; gap: 10px; margin-bottom: 14px; }
+    .telemetry-sync { min-height: 20px; margin: -4px 0 12px; color: #68747c; font-size: 12px; }
+    .telemetry-sync.error { color: #b02c2c; }
+    .versions { display: flex; flex-wrap: wrap; gap: 8px; margin: -8px 0 20px; }
+    .version-chip { padding: 6px 9px; border: 1px solid #d7dddf; border-radius: 4px; color: #4d5961; background: white; font-size: 12px; }
+    .skill-admin { padding: 26px 0 30px; }
+    .skill-admin-tools { display: grid; grid-template-columns: minmax(180px, 260px) auto; gap: 10px; align-items: end; margin-bottom: 14px; }
+    .skill-review-layout { display: grid; grid-template-columns: minmax(300px, .8fr) minmax(420px, 1.2fr); gap: 14px; align-items: start; }
+    .skill-review-list, .skill-review-detail, .skill-usage-panel { min-width: 0; border: 1px solid #dfe3e6; background: white; }
+    .skill-review-list { max-height: 670px; overflow: auto; }
+    .skill-review-item { width: 100%; min-height: 92px; padding: 13px 14px; border: 0; border-bottom: 1px solid #e7eaec; border-radius: 0; background: white; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; text-align: left; }
+    .skill-review-item:hover, .skill-review-item.active { background: #f3f7f5; }
+    .skill-review-item strong, .skill-review-item small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .skill-review-item small { margin-top: 4px; color: #778289; font-size: 11px; }
+    .skill-review-detail { min-height: 360px; padding: 18px; }
+    .skill-detail-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: start; }
+    .skill-detail-head h2 { font-size: 17px; }
+    .skill-detail-head p, .skill-detail-copy { color: #68747c; font-size: 12px; line-height: 1.6; }
+    .skill-detail-meta, .risk-list { display: flex; flex-wrap: wrap; gap: 7px; margin: 14px 0; }
+    .skill-detail-meta span, .risk-list span { min-height: 25px; padding: 0 8px; border-radius: 4px; display: inline-flex; align-items: center; color: #4d5961; background: #eef1f2; font-size: 11px; }
+    .risk-list span { color: #8b4d00; background: #fff3df; }
+    .skill-file-tree, .skill-preview { max-height: 220px; overflow: auto; margin: 10px 0 0; padding: 11px; border: 1px solid #e1e5e7; background: #f8f9f9; color: #30383d; font: 11px/1.55 Consolas, "Microsoft YaHei", monospace; white-space: pre-wrap; word-break: break-word; }
+    .skill-preview-tabs { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+    .skill-preview-tabs button { min-height: 30px; padding: 0 9px; font-size: 11px; }
+    .skill-review-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 8px; margin-top: 16px; padding-top: 14px; border-top: 1px solid #e1e5e7; }
+    .risk-confirm { margin-right: auto; }
+    .skill-usage-panel { margin-top: 24px; padding: 18px; }
+    .skill-admin-status { min-height: 20px; margin: 8px 0 12px; color: #68747c; font-size: 12px; }
+    .skill-admin-status.error { color: #b02c2c; }
+    [hidden] { display: none !important; }
+    @media (max-width: 760px) {
+      header { padding: 0 16px; }
+      .toolbar, .form-grid { grid-template-columns: 1fr; }
+      .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .telemetry-tools { grid-template-columns: 1fr; }
+      .field.wide { grid-column: auto; }
+      .publish-actions { align-items: stretch; flex-direction: column; }
+      .publish-actions button { width: 100%; }
+      .table-wrap { overflow-x: auto; }
+      table { min-width: 760px; }
+      .skill-review-layout { grid-template-columns: 1fr; }
+      .skill-admin-tools { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>先马·AI Studio</strong>
+    <span>企业管理后台</span>
+  </header>
+  <main>
+    <section class="toolbar" id="releaseAuth" hidden>
+      <div class="field">
+        <label for="token">管理密码</label>
+        <input id="token" type="password" autocomplete="current-password" placeholder="输入更新后台管理密码">
+      </div>
+      <button class="secondary" id="loginButton" type="button">连接后台</button>
+    </section>
+
+    <nav class="tabs" aria-label="后台功能">
+      <button class="tab active" id="telemetryTab" type="button">使用统计</button>
+      <button class="tab" id="skillReviewTab" type="button" hidden>技能审核</button>
+      <button class="tab" id="releaseTab" type="button">版本发布</button>
+    </nav>
+
+    <div id="telemetryPanel">
+      <section class="telemetry">
+        <div class="section-head">
+          <div>
+            <h1>软件使用统计</h1>
+            <p>在线状态按客户端心跳计算，不采集对话、文件内容、密码或令牌。</p>
+          </div>
+        </div>
+        <div class="metric-grid">
+          <div class="metric"><span>累计用户</span><strong id="totalUsers">-</strong></div>
+          <div class="metric"><span>当前在线</span><strong id="onlineUsers">-</strong></div>
+          <div class="metric"><span>今日活跃</span><strong id="activeToday">-</strong></div>
+          <div class="metric"><span>近 7 天活跃</span><strong id="activeSevenDays">-</strong></div>
+          <div class="metric"><span>设备总数</span><strong id="totalDevices">-</strong></div>
+        </div>
+        <div class="section-head">
+          <div><h2>版本分布</h2></div>
+        </div>
+        <div class="versions" id="versionDistribution"><span class="version-chip">尚未连接后台</span></div>
+        <div class="section-head">
+          <div>
+            <h2>用户列表</h2>
+            <p>可按姓名、钉钉 ID、企业、部门或版本搜索。</p>
+          </div>
+        </div>
+        <div class="telemetry-tools">
+          <input id="telemetrySearch" placeholder="搜索用户">
+          <button class="secondary" id="telemetryRefreshButton" type="button" disabled>刷新</button>
+          <button class="secondary" id="telemetryExportButton" type="button" disabled>导出 CSV</button>
+        </div>
+        <div class="telemetry-sync" id="telemetryStatus" role="status" aria-live="polite">正在加载统计数据...</div>
+        <div class="table-wrap" id="telemetryUserList"><div class="empty">尚未连接后台</div></div>
+      </section>
+    </div>
+
+    <div id="skillReviewPanel" hidden>
+      <section class="skill-admin">
+        <div class="section-head">
+          <div><h1>公司技能审核</h1><p>审核员只能批准、驳回或下架，不能修改用户提交内容。</p></div>
+        </div>
+        <div class="skill-admin-tools">
+          <div class="field"><label for="skillStatusFilter">提交状态</label><select id="skillStatusFilter"><option value="pending">待审核</option><option value="approved">已通过</option><option value="rejected">已驳回</option><option value="revoked">已下架</option><option value="">全部</option></select></div>
+          <button class="secondary" id="skillRefreshButton" type="button" disabled>刷新</button>
+        </div>
+        <div class="skill-admin-status" id="skillAdminStatus">请先输入管理密码并连接后台。</div>
+        <div class="skill-review-layout">
+          <div class="skill-review-list" id="skillReviewList"><div class="empty">尚未连接后台</div></div>
+          <div class="skill-review-detail" id="skillReviewDetail"><div class="empty">选择一条技能提交查看详情</div></div>
+        </div>
+        <section class="skill-usage-panel">
+          <div class="section-head"><div><h2>匿名使用统计</h2><p>仅按技能、版本和日期聚合，不保存用户、提示词、附件或结果。</p></div></div>
+          <div class="table-wrap" id="skillUsageList"><div class="empty">暂无统计数据</div></div>
+        </section>
+      </section>
+    </div>
+
+    <div id="releasePanel" hidden>
+
+    <section class="publish">
+      <div class="section-head">
+        <div>
+          <h1>发布新版本</h1>
+          <p>选择新安装包，填写用户能看到的版本说明，然后发布。</p>
+        </div>
+      </div>
+      <form id="publishForm">
+        <div class="form-grid">
+          <div class="field">
+            <label for="displayVersion">显示版本</label>
+            <input id="displayVersion" required value="1.4.0" placeholder="例如 1.4.0">
+          </div>
+          <div class="field">
+            <label for="internalVersion">内部更新版本</label>
+            <input id="internalVersion" required placeholder="系统自动建议">
+          </div>
+          <div class="field">
+            <label for="channel">更新通道</label>
+            <select id="channel">
+              <option value="stable-v2" selected>统一版本 stable-v2</option>
+              <option value="stable">旧版本 stable</option>
+            </select>
+          </div>
+          <div class="field wide">
+            <label for="title">更新标题</label>
+            <input id="title" required value="功能优化与问题修复" placeholder="例如 功能优化与问题修复">
+          </div>
+          <div class="field wide">
+            <label for="notes">更新内容</label>
+            <textarea id="notes" required placeholder="每行填写一项，例如：&#10;1. 优化文件生成速度&#10;2. 修复历史对话丢失问题"></textarea>
+          </div>
+            <div class="field wide">
+              <label for="installer">Windows 安装包</label>
+              <input id="installer" type="file" accept=".exe,application/vnd.microsoft.portable-executable" required>
+              <p class="upload-note">安装包会分片上传；网络波动时自动重试，再次点击可从已完成部分继续。</p>
+            </div>
+          <label class="check wide"><input id="force" type="checkbox"> 强制更新，用户不能选择稍后提醒</label>
+        </div>
+        <progress id="progress" max="100" value="0" hidden></progress>
+        <div class="publish-actions">
+          <div class="status" id="status">请先连接后台。</div>
+          <button class="primary" id="publishButton" type="submit" disabled>上传并发布</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="history">
+      <div class="section-head">
+        <div>
+          <h2>已发布版本</h2>
+          <p>撤回后，尚未更新的客户端将不再看到该版本。</p>
+        </div>
+        <button class="secondary" id="refreshButton" type="button" disabled>刷新</button>
+      </div>
+      <div class="table-wrap" id="releaseList"><div class="empty">尚未连接后台</div></div>
+    </section>
+    </div>
+  </main>
+  <script>
+    const adminFeatures = Object.freeze(window.__XIANMA_ADMIN_FEATURES__ || {});
+    const companySkillAdminVisible = adminFeatures.companySkills === true;
+    const rootPath = location.pathname.replace(/\/admin(?:\/index\.html)?\/?$/, "");
+    const apiUrl = (value) => `${rootPath}${value}`;
+    const elements = Object.fromEntries(["token", "loginButton", "releaseAuth", "telemetryTab", "skillReviewTab", "releaseTab", "telemetryPanel", "skillReviewPanel", "releasePanel", "skillStatusFilter", "skillRefreshButton", "skillAdminStatus", "skillReviewList", "skillReviewDetail", "skillUsageList", "totalUsers", "onlineUsers", "activeToday", "activeSevenDays", "totalDevices", "versionDistribution", "telemetrySearch", "telemetryRefreshButton", "telemetryExportButton", "telemetryStatus", "telemetryUserList", "publishForm", "displayVersion", "internalVersion", "channel", "title", "notes", "installer", "force", "progress", "status", "publishButton", "refreshButton", "releaseList"].map((id) => [id, document.getElementById(id)]));
+    elements.token.value = sessionStorage.getItem("xianma.update.adminToken") || "";
+    elements.skillReviewTab.hidden = !companySkillAdminVisible;
+
+    function setStatus(message, error = false) {
+      elements.status.textContent = message;
+      elements.status.classList.toggle("error", error);
+    }
+
+    function setTelemetryStatus(message, error = false) {
+      elements.telemetryStatus.textContent = message;
+      elements.telemetryStatus.classList.toggle("error", error);
+    }
+
+    function token() {
+      return elements.token.value.trim();
+    }
+
+    function encodeText(value) {
+      const bytes = new TextEncoder().encode(value);
+      let binary = "";
+      for (const byte of bytes) binary += String.fromCharCode(byte);
+      return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    }
+
+    function escapeHtml(value) {
+      return String(value || "").replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[character]));
+    }
+
+    const PRIVATE_DEVELOPER_NICKNAMES = new Set(["林动"]);
+
+    function identityNames(identity) {
+      if (!identity) return [];
+      if (typeof identity === "string") return [identity];
+      return [identity.name, identity.nickname, identity.nickName, identity.displayName, identity.username, identity.userName, identity.realName, identity.submitterName, identity.dingtalkNickname];
+    }
+
+    function isPrivateDeveloperIdentity(...identities) {
+      return identities.some((identity) => identityNames(identity).some((name) => PRIVATE_DEVELOPER_NICKNAMES.has(String(name || "").trim())));
+    }
+
+    function visibleAdminRecords(records, identitySelector = (item) => item) {
+      return (Array.isArray(records) ? records : []).filter((item) => !isPrivateDeveloperIdentity(identitySelector(item)));
+    }
+
+    function firstCsvCell(line) {
+      const match = String(line || "").match(/^"((?:[^"]|"")*)"/);
+      return match ? match[1].replace(/""/g, '"').trim() : String(line || "").split(",", 1)[0].trim();
+    }
+
+    function hidePrivateDeveloperCsv(csv) {
+      const lines = String(csv || "").replace(/^\uFEFF/, "").split(/\r?\n/);
+      return `\uFEFF${lines.filter((line, index) => index === 0 || !PRIVATE_DEVELOPER_NICKNAMES.has(firstCsvCell(line))).join("\r\n")}`;
+    }
+
+    function formatTime(value) {
+      if (!value) return "-";
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? "-" : date.toLocaleString("zh-CN");
+    }
+
+    function showPanel(name) {
+      if (name === "skills" && !companySkillAdminVisible) name = "telemetry";
+      const telemetryActive = name === "telemetry";
+      const skillActive = name === "skills";
+      elements.telemetryPanel.hidden = !telemetryActive;
+      elements.skillReviewPanel.hidden = !skillActive;
+      elements.releasePanel.hidden = telemetryActive || skillActive;
+      elements.releaseAuth.hidden = telemetryActive;
+      elements.telemetryTab.classList.toggle("active", telemetryActive);
+      elements.skillReviewTab.classList.toggle("active", skillActive);
+      elements.releaseTab.classList.toggle("active", !telemetryActive && !skillActive);
+    }
+
+    let skillSubmissions = [];
+    let selectedSkillSubmissionId = "";
+    let selectedSkillSubmission = null;
+
+    function setSkillAdminStatus(message, error = false) {
+      elements.skillAdminStatus.textContent = message;
+      elements.skillAdminStatus.classList.toggle("error", error);
+    }
+
+    async function loadSkillAdmin() {
+      if (!companySkillAdminVisible) return;
+      if (!token()) return setSkillAdminStatus("请输入管理密码。", true);
+      elements.skillRefreshButton.disabled = true;
+      setSkillAdminStatus("正在读取技能审核记录...");
+      try {
+        const status = elements.skillStatusFilter.value;
+        const [submissions, usage] = await Promise.all([
+          requestJson(`/api/admin/skill-submissions?${new URLSearchParams({ status })}`),
+          requestJson("/api/admin/company-skills/usage")
+        ]);
+        skillSubmissions = visibleAdminRecords(submissions.submissions, (item) => item.submitter);
+        renderSkillSubmissionList();
+        renderSkillUsage(usage.skills || []);
+        elements.skillRefreshButton.disabled = false;
+        sessionStorage.setItem("xianma.update.adminToken", token());
+        setSkillAdminStatus(`已读取 ${skillSubmissions.length} 条记录 · ${new Date().toLocaleTimeString("zh-CN")}`);
+        if (selectedSkillSubmissionId && skillSubmissions.some((item) => item.submissionId === selectedSkillSubmissionId)) {
+          await loadSkillSubmissionDetail(selectedSkillSubmissionId);
+        } else {
+          selectedSkillSubmissionId = "";
+          selectedSkillSubmission = null;
+          elements.skillReviewDetail.innerHTML = '<div class="empty">选择一条技能提交查看详情</div>';
+        }
+      } catch (error) {
+        setSkillAdminStatus(error.message || "技能审核记录读取失败", true);
+        elements.skillRefreshButton.disabled = false;
+      }
+    }
+
+    function renderSkillSubmissionList() {
+      if (!skillSubmissions.length) {
+        elements.skillReviewList.innerHTML = '<div class="empty">当前筛选条件下没有提交记录</div>';
+        return;
+      }
+      elements.skillReviewList.innerHTML = skillSubmissions.map((item) => `<button class="skill-review-item ${item.submissionId === selectedSkillSubmissionId ? "active" : ""}" type="button" data-skill-submission="${escapeHtml(item.submissionId)}">
+        <span><strong>${escapeHtml(item.displayName)}</strong><small>${escapeHtml(item.name)} · v${escapeHtml(item.version)}</small><small>${escapeHtml(item.submitter?.name || "钉钉用户")} · ${escapeHtml(item.submitter?.department || "未同步部门")}</small></span>
+        <span class="tag ${escapeHtml(item.status)}">${escapeHtml(({ pending: "待审核", approved: "已通过", rejected: "已驳回", revoked: "已下架" })[item.status] || item.status)}</span>
+      </button>`).join("");
+    }
+
+    async function loadSkillSubmissionDetail(submissionId) {
+      selectedSkillSubmissionId = submissionId;
+      renderSkillSubmissionList();
+      elements.skillReviewDetail.innerHTML = '<div class="empty">正在读取安全预览...</div>';
+      try {
+        const result = await requestJson(`/api/admin/skill-submissions/${encodeURIComponent(submissionId)}`);
+        selectedSkillSubmission = result.submission;
+        if (isPrivateDeveloperIdentity(selectedSkillSubmission?.submitter)) {
+          selectedSkillSubmission = null;
+          selectedSkillSubmissionId = "";
+          elements.skillReviewDetail.innerHTML = '<div class="empty">该记录不在管理后台展示范围内</div>';
+          renderSkillSubmissionList();
+          return;
+        }
+        renderSkillSubmissionDetail();
+      } catch (error) {
+        elements.skillReviewDetail.innerHTML = `<div class="empty">${escapeHtml(error.message || "详情读取失败")}</div>`;
+      }
+    }
+
+    function renderSkillSubmissionDetail() {
+      const item = selectedSkillSubmission;
+      if (!item) return;
+      const preview = (item.previews || [])[0];
+      elements.skillReviewDetail.innerHTML = `
+        <div class="skill-detail-head"><div><h2>${escapeHtml(item.displayName)}</h2><p>${escapeHtml(item.name)} · v${escapeHtml(item.version)} · ${escapeHtml(item.category)}</p></div><span class="tag ${escapeHtml(item.status)}">${escapeHtml(({ pending: "待审核", approved: "已通过", rejected: "已驳回" })[item.status] || item.status)}</span></div>
+        <p class="skill-detail-copy">${escapeHtml(item.description)}</p>
+        <div class="skill-detail-meta"><span>提交人：${escapeHtml(item.submitter?.name || "-")}</span><span>部门：${escapeHtml(item.submitter?.department || "-")}</span><span>${Number(item.fileCount || 0)} 个文件</span><span>${escapeHtml(item.sha256 || "")}</span></div>
+        ${(item.riskItems || []).length ? `<div class="risk-list">${item.riskItems.map((risk) => `<span>${escapeHtml(risk)}</span>`).join("")}</div>` : '<div class="risk-list"><span>未检测到高风险项</span></div>'}
+        <details open><summary>文件树</summary><pre class="skill-file-tree">${escapeHtml((item.fileTree || []).map((file) => `${file.path}  (${file.size} bytes)`).join("\n"))}</pre></details>
+        ${(item.previews || []).length ? `<div class="skill-preview-tabs">${item.previews.map((file, index) => `<button class="secondary" type="button" data-skill-preview="${index}">${escapeHtml(file.path)}</button>`).join("")}</div><pre class="skill-preview" id="skillPreviewContent">${escapeHtml(preview?.content || "")}</pre>` : ""}
+        ${item.rejectionReason ? `<p class="skill-detail-copy">驳回原因：${escapeHtml(item.rejectionReason)}</p>` : ""}
+        ${item.status === "pending" ? `<div class="skill-review-actions"><label class="check risk-confirm"><input id="skillRiskAcknowledged" type="checkbox" ${item.riskLevel === "high" ? "" : "checked"}> 已核对风险项和文件内容</label><button class="secondary" type="button" data-skill-download>下载原始包</button><button class="danger" type="button" data-skill-reject>驳回</button><button class="primary" type="button" data-skill-approve>批准发布</button></div>` : (item.status === "approved" ? `<div class="skill-review-actions"><button class="secondary" type="button" data-skill-download>下载原始包</button><button class="danger" type="button" data-skill-revoke="${escapeHtml(item.skillId)}">下架公司技能</button></div>` : `<div class="skill-review-actions"><button class="secondary" type="button" data-skill-download>下载原始包</button></div>`)}
+      `;
+    }
+
+    function renderSkillUsage(skills) {
+      if (!skills.length) {
+        elements.skillUsageList.innerHTML = '<div class="empty">暂无公司技能调用记录</div>';
+        return;
+      }
+      const rows = skills.map((item) => `<tr><td><strong>${escapeHtml(item.displayName)}</strong><small>${escapeHtml(item.skillId)}</small></td><td>${Number(item.invoked || 0)}</td><td>${Number(item.succeeded || 0)}</td><td>${Number(item.failed || 0)}</td><td>${Number(item.cancelled || 0)}</td><td>${Number(item.successRate || 0)}%</td><td>${Number(item.last7Days || 0)} / ${Number(item.last30Days || 0)}</td><td>${escapeHtml(formatTime(item.lastInvokedAt))}</td></tr>`).join("");
+      elements.skillUsageList.innerHTML = `<table><thead><tr><th>技能</th><th>调用</th><th>成功</th><th>失败</th><th>取消</th><th>成功率</th><th>7天 / 30天</th><th>最后调用</th></tr></thead><tbody>${rows}</tbody></table>`;
+    }
+
+    async function loadTelemetry({ refreshAuthorization = false } = {}) {
+      elements.telemetryRefreshButton.disabled = true;
+      setTelemetryStatus(refreshAuthorization ? "正在同步 MAPMS 用户权限..." : "正在读取使用统计...");
+      try {
+        const refreshResult = refreshAuthorization
+          ? await requestPublicJson("/api/admin/telemetry/refresh", { method: "POST" })
+          : null;
+        const search = elements.telemetrySearch.value.trim();
+        const [overview, users] = await Promise.all([
+          requestPublicJson("/api/admin/telemetry/overview"),
+          requestPublicJson(`/api/admin/telemetry/users?${new URLSearchParams({ search })}`)
+        ]);
+        elements.totalUsers.textContent = overview.totalUsers ?? 0;
+        elements.onlineUsers.textContent = overview.onlineUsers ?? 0;
+        elements.activeToday.textContent = overview.activeToday ?? 0;
+        elements.activeSevenDays.textContent = overview.activeSevenDays ?? 0;
+        elements.totalDevices.textContent = overview.totalDevices ?? 0;
+        const versions = Object.entries(overview.versionDistribution || {}).sort((left, right) => right[1] - left[1]);
+        elements.versionDistribution.innerHTML = versions.length
+          ? versions.map(([version, count]) => `<span class="version-chip">${escapeHtml(version)}：${count} 台</span>`).join("")
+          : '<span class="version-chip">暂无设备数据</span>';
+        renderTelemetryUsers(users.users || []);
+        elements.telemetryExportButton.disabled = false;
+        const detail = refreshResult ? `，已复核 ${Number(refreshResult.checked || 0)} 位用户` : "";
+        setTelemetryStatus(`已更新：${new Date().toLocaleTimeString("zh-CN")}${detail}`);
+      } finally {
+        elements.telemetryRefreshButton.disabled = false;
+      }
+    }
+
+    function renderTelemetryUsers(users) {
+      users = visibleAdminRecords(users);
+      if (!users.length) {
+        elements.telemetryUserList.innerHTML = '<div class="empty">没有符合条件的用户</div>';
+        return;
+      }
+      const rows = users.map((user) => {
+        const mapmsStatus = user.mapms?.status === "synced"
+          ? "已关联"
+          : (user.mapms?.status === "unbound" ? "未绑定" : (user.mapms?.status === "denied" ? "不可用" : "待校验"));
+        return `<tr>
+        <td><strong>${escapeHtml(user.name || "钉钉用户")}</strong><small>${escapeHtml(user.userId)}</small></td>
+        <td><strong>${escapeHtml(user.department || "-")}</strong><small>${escapeHtml(user.corpId || "-")}</small></td>
+        <td>${escapeHtml((user.versions || []).join(" / ") || "-")}</td>
+        <td>${Number(user.deviceCount || 0)}</td>
+        <td><strong>${escapeHtml(formatTime(user.lastSeenAt))}</strong><small>首次 ${escapeHtml(formatTime(user.firstSeenAt))}</small></td>
+        <td><strong>${mapmsStatus}</strong><small>${escapeHtml(user.mapms?.userId || user.mapms?.username || "-")}</small></td>
+        <td><span class="tag ${user.online ? "" : "deleted"}">${user.online ? "在线" : "离线"}</span></td>
+      </tr>`;
+      }).join("");
+      elements.telemetryUserList.innerHTML = `<table><thead><tr><th>用户</th><th>部门 / 企业</th><th>版本</th><th>设备</th><th>活跃时间</th><th>MAPMS</th><th>状态</th></tr></thead><tbody>${rows}</tbody></table>`;
+    }
+
+    async function loadReleases() {
+      if (!token()) return setStatus("请输入管理密码。", true);
+      setStatus("正在连接更新服务...");
+      const query = new URLSearchParams({ channel: elements.channel.value, platform: "win32", arch: "x64" });
+      const response = await fetch(apiUrl(`/api/admin/releases?${query}`), { headers: { authorization: `Bearer ${token()}` } });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || `连接失败：${response.status}`);
+      sessionStorage.setItem("xianma.update.adminToken", token());
+      elements.publishButton.disabled = false;
+      elements.refreshButton.disabled = false;
+      if (!elements.internalVersion.value) elements.internalVersion.value = result.suggestedInternalVersion || "1.4.0";
+      renderReleases(result.releases || []);
+      setStatus("更新后台已连接，可以发布版本。");
+    }
+
+    function renderReleases(releases) {
+      if (!releases.length) {
+        elements.releaseList.innerHTML = '<div class="empty">还没有发布过版本</div>';
+        return;
+      }
+      const rows = releases.map((release) => {
+        const statusText = release.status === "deleted" ? "文件已删除" : (release.status === "revoked" ? "已撤回" : "已发布");
+        const action = release.status === "published"
+          ? `<button class="danger" type="button" data-revoke="${escapeHtml(release.releaseId)}">撤回</button>`
+          : (release.status === "revoked" ? `<button class="danger" type="button" data-delete-release="${escapeHtml(release.releaseId)}" data-delete-version="${escapeHtml(release.displayVersion)}">永久删除</button>` : "-");
+        return `<tr>
+        <td><strong>${escapeHtml(release.displayVersion)}</strong><small>${escapeHtml(release.channel)} · 内部版本 ${escapeHtml(release.internalVersion)}</small></td>
+        <td><strong>${escapeHtml(release.title)}</strong><small>${escapeHtml(new Date(release.publishedAt).toLocaleString("zh-CN"))}</small></td>
+        <td>${release.force ? "强制更新" : "可稍后提醒"}</td>
+        <td><span class="tag ${escapeHtml(release.status)}">${statusText}</span></td>
+        <td><div class="release-actions">${action}</div></td>
+      </tr>`;
+      }).join("");
+      elements.releaseList.innerHTML = `<table><thead><tr><th>版本</th><th>更新说明</th><th>更新方式</th><th>状态</th><th>操作</th></tr></thead><tbody>${rows}</tbody></table>`;
+    }
+
+    function wait(milliseconds) {
+      return new Promise((resolve) => setTimeout(resolve, milliseconds));
+    }
+
+    async function requestJson(path, options = {}) {
+      const response = await fetch(apiUrl(path), {
+        ...options,
+        headers: {
+          authorization: `Bearer ${token()}`,
+          ...(options.body ? { "content-type": "application/json" } : {}),
+          ...(options.headers || {})
+        }
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const error = new Error(result.error || `请求失败：${response.status}`);
+        error.status = response.status;
+        throw error;
+      }
+      return result;
+    }
+
+    async function requestPublicJson(path, options = {}) {
+      const response = await fetch(apiUrl(path), options);
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || `请求失败：${response.status}`);
+      return result;
+    }
+
+    async function fileFingerprint(file) {
+      const sampleSize = 1024 * 1024;
+      const first = new Uint8Array(await file.slice(0, Math.min(sampleSize, file.size)).arrayBuffer());
+      const lastStart = Math.max(0, file.size - sampleSize);
+      const last = new Uint8Array(await file.slice(lastStart, file.size).arrayBuffer());
+      const metadata = new TextEncoder().encode(`${file.name}\n${file.size}\n${file.lastModified}\n`);
+      const hashes = [2166136261, 2246822519, 3266489917, 668265263];
+      const update = (bytes) => {
+        for (const byte of bytes) {
+          for (let index = 0; index < hashes.length; index += 1) {
+            hashes[index] = Math.imul((hashes[index] ^ ((byte + index * 31) & 255)) >>> 0, 16777619 + index * 2) >>> 0;
+          }
+        }
+      };
+      update(metadata);
+      update(first);
+      update(last);
+      return hashes.map((value) => value.toString(16).padStart(8, "0")).join("");
+    }
+
+    function uploadChunk(uploadId, index, chunk, onProgress) {
+      return new Promise((resolve, reject) => {
+        const request = new XMLHttpRequest();
+        request.open("PUT", apiUrl(`/api/admin/releases/uploads/${encodeURIComponent(uploadId)}/chunks/${index}`));
+        request.setRequestHeader("Authorization", `Bearer ${token()}`);
+        request.setRequestHeader("Content-Type", "application/octet-stream");
+        request.upload.onprogress = (event) => {
+          if (event.lengthComputable) onProgress(event.loaded);
+        };
+        request.onload = () => {
+          let result = {};
+          try { result = JSON.parse(request.responseText || "{}"); } catch {}
+          if (request.status >= 200 && request.status < 300) resolve(result);
+          else reject(new Error(result.error || `分片上传失败：${request.status}`));
+        };
+        request.onerror = () => reject(new Error("网络连接中断"));
+        request.onabort = () => reject(new Error("上传已中断"));
+        request.send(chunk);
+      });
+    }
+
+    async function uploadRelease(file, metadata) {
+      setStatus("正在读取安装包...");
+      const fingerprint = await fileFingerprint(file);
+      const storageKey = `xianma.update.upload.${metadata.internalVersion}.${fingerprint}`;
+      let resumeId = localStorage.getItem(storageKey) || "";
+      const initialize = () => requestJson("/api/admin/releases/uploads", {
+        method: "POST",
+        body: JSON.stringify({ ...metadata, fileSize: file.size, fileFingerprint: fingerprint, resumeId })
+      });
+      let session;
+      try {
+        session = await initialize();
+      } catch (error) {
+        if (!resumeId || !/上传记录.*不一致/.test(error.message)) throw error;
+        localStorage.removeItem(storageKey);
+        resumeId = "";
+        session = await initialize();
+      }
+      localStorage.setItem(storageKey, session.uploadId);
+
+      const uploaded = new Set(session.uploadedChunks || []);
+      const pending = Array.from({ length: session.chunkCount }, (_, index) => index).filter((index) => !uploaded.has(index));
+      let completedBytes = Array.from(uploaded).reduce((total, index) => {
+        const start = index * session.chunkSize;
+        return total + Math.min(session.chunkSize, file.size - start);
+      }, 0);
+      const activeBytes = new Map();
+      const updateProgress = () => {
+        const active = Array.from(activeBytes.values()).reduce((total, value) => total + value, 0);
+        const percent = Math.min(99, Math.floor(((completedBytes + active) / file.size) * 100));
+        elements.progress.value = percent;
+        setStatus(`正在分片上传：${percent}%（已完成 ${uploaded.size}/${session.chunkCount}）`);
+      };
+      updateProgress();
+
+      async function uploadWithRetry(index) {
+        const start = index * session.chunkSize;
+        const chunk = file.slice(start, Math.min(file.size, start + session.chunkSize));
+        for (let attempt = 1; attempt <= 6; attempt += 1) {
+          try {
+            activeBytes.set(index, 0);
+            await uploadChunk(session.uploadId, index, chunk, (loaded) => {
+              activeBytes.set(index, loaded);
+              updateProgress();
+            });
+            activeBytes.delete(index);
+            completedBytes += chunk.size;
+            uploaded.add(index);
+            updateProgress();
+            return;
+          } catch (error) {
+            activeBytes.delete(index);
+            updateProgress();
+            if (attempt >= 6) throw new Error(`第 ${index + 1} 个分片连续上传失败：${error.message}`);
+            const delay = Math.min(12000, 1000 * (2 ** (attempt - 1)));
+            setStatus(`网络波动，第 ${index + 1} 个分片将在 ${Math.ceil(delay / 1000)} 秒后重试（${attempt}/6）`);
+            await wait(delay);
+          }
+        }
+      }
+
+      let cursor = 0;
+      async function worker() {
+        while (cursor < pending.length) {
+          const index = pending[cursor];
+          cursor += 1;
+          await uploadWithRetry(index);
+        }
+      }
+      await Promise.all(Array.from({ length: Math.min(3, Math.max(1, pending.length)) }, () => worker()));
+      setStatus("安装包已上传，正在校验并发布...");
+      const result = await requestJson(`/api/admin/releases/uploads/${encodeURIComponent(session.uploadId)}/complete`, { method: "POST" });
+      localStorage.removeItem(storageKey);
+      return result;
+    }
+
+    elements.loginButton.addEventListener("click", async () => {
+      try {
+        if (!elements.skillReviewPanel.hidden) {
+          await loadSkillAdmin();
+          setSkillAdminStatus("技能审核后台已连接。");
+        } else {
+          await loadReleases();
+          setStatus("管理后台已连接。");
+        }
+      } catch (error) {
+        if (!elements.skillReviewPanel.hidden) setSkillAdminStatus(error.message, true);
+        else setStatus(error.message, true);
+      }
+    });
+    elements.telemetryTab.addEventListener("click", () => {
+      showPanel("telemetry");
+      loadTelemetry({ refreshAuthorization: true }).catch((error) => setTelemetryStatus(error.message, true));
+    });
+    elements.skillReviewTab.addEventListener("click", () => {
+      if (!companySkillAdminVisible) return;
+      showPanel("skills");
+      loadSkillAdmin();
+    });
+    elements.releaseTab.addEventListener("click", () => showPanel("release"));
+    elements.skillRefreshButton.addEventListener("click", loadSkillAdmin);
+    elements.skillStatusFilter.addEventListener("change", loadSkillAdmin);
+    elements.skillReviewList.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-skill-submission]");
+      if (button) loadSkillSubmissionDetail(button.dataset.skillSubmission);
+    });
+    elements.skillReviewDetail.addEventListener("click", async (event) => {
+      const previewButton = event.target.closest("[data-skill-preview]");
+      if (previewButton && selectedSkillSubmission) {
+        const preview = selectedSkillSubmission.previews?.[Number(previewButton.dataset.skillPreview)];
+        const target = document.getElementById("skillPreviewContent");
+        if (target) target.textContent = preview?.content || "";
+        return;
+      }
+      if (event.target.closest("[data-skill-download]")) {
+        try {
+          const response = await fetch(apiUrl(`/api/admin/skill-submissions/${encodeURIComponent(selectedSkillSubmissionId)}/package`), { headers: { authorization: `Bearer ${token()}` } });
+          if (!response.ok) {
+            const result = await response.json().catch(() => ({}));
+            throw new Error(result.error || "原始技能包下载失败");
+          }
+          const objectUrl = URL.createObjectURL(await response.blob());
+          const anchor = document.createElement("a");
+          anchor.href = objectUrl;
+          anchor.download = `${selectedSkillSubmission?.name || "company-skill"}-${selectedSkillSubmission?.version || "submission"}.zip`;
+          anchor.click();
+          setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+        } catch (error) { setSkillAdminStatus(error.message, true); }
+        return;
+      }
+      if (event.target.closest("[data-skill-approve]")) {
+        const acknowledged = document.getElementById("skillRiskAcknowledged")?.checked === true;
+        if (!acknowledged) return setSkillAdminStatus("请先核对并勾选风险确认。", true);
+        if (!confirm(`确认批准“${selectedSkillSubmission?.displayName || "这个技能"}”并发布到公司技能库吗？`)) return;
+        try {
+          await requestJson(`/api/admin/skill-submissions/${encodeURIComponent(selectedSkillSubmissionId)}/approve`, { method: "POST", body: JSON.stringify({ riskAcknowledged: acknowledged }) });
+          setSkillAdminStatus("技能已批准并发布。");
+          await loadSkillAdmin();
+        } catch (error) { setSkillAdminStatus(error.message, true); }
+        return;
+      }
+      if (event.target.closest("[data-skill-reject]")) {
+        const reason = prompt("请填写驳回原因，用户修改后可以提交新版本：", "");
+        if (!reason?.trim()) return;
+        try {
+          await requestJson(`/api/admin/skill-submissions/${encodeURIComponent(selectedSkillSubmissionId)}/reject`, { method: "POST", body: JSON.stringify({ reason: reason.trim() }) });
+          setSkillAdminStatus("技能已驳回，原因会展示给提交人。");
+          await loadSkillAdmin();
+        } catch (error) { setSkillAdminStatus(error.message, true); }
+        return;
+      }
+      const revokeButton = event.target.closest("[data-skill-revoke]");
+      if (revokeButton) {
+        if (!confirm("下架后，公司技能库立即隐藏，已安装副本会在同步时停用。确认继续吗？")) return;
+        try {
+          await requestJson(`/api/admin/company-skills/${encodeURIComponent(revokeButton.dataset.skillRevoke)}/revoke`, { method: "POST" });
+          setSkillAdminStatus("公司技能已下架。");
+          await loadSkillAdmin();
+        } catch (error) { setSkillAdminStatus(error.message, true); }
+      }
+    });
+    elements.telemetryRefreshButton.addEventListener("click", () => loadTelemetry({ refreshAuthorization: true }).catch((error) => setTelemetryStatus(error.message, true)));
+    elements.telemetrySearch.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") loadTelemetry().catch((error) => setTelemetryStatus(error.message, true));
+    });
+    elements.telemetryExportButton.addEventListener("click", async () => {
+      try {
+        const query = new URLSearchParams({ search: elements.telemetrySearch.value.trim() });
+        const response = await fetch(apiUrl(`/api/admin/telemetry/export?${query}`));
+        if (!response.ok) {
+          const result = await response.json().catch(() => ({}));
+          throw new Error(result.error || "导出失败");
+        }
+        const csv = hidePrivateDeveloperCsv(await response.text());
+        const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = `先马AI-Studio-使用统计-${new Date().toISOString().slice(0, 10)}.csv`;
+        anchor.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        setTelemetryStatus("统计数据已导出。");
+      } catch (error) {
+        setTelemetryStatus(error.message, true);
+      }
+    });
+    elements.refreshButton.addEventListener("click", () => loadReleases().catch((error) => setStatus(error.message, true)));
+    elements.publishForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const file = elements.installer.files[0];
+      if (!file || !file.name.toLowerCase().endsWith(".exe")) return setStatus("请选择 EXE 安装包。", true);
+      const metadata = {
+        displayVersion: elements.displayVersion.value.trim(),
+        internalVersion: elements.internalVersion.value.trim(),
+        title: elements.title.value.trim(),
+        notes: elements.notes.value.trim(),
+        force: elements.force.checked,
+        fileName: file.name,
+        channel: elements.channel.value,
+        platform: "win32",
+        arch: "x64"
+      };
+      elements.publishButton.disabled = true;
+      elements.progress.hidden = false;
+      elements.progress.value = 0;
+      try {
+        await uploadRelease(file, metadata);
+        elements.progress.value = 100;
+        setStatus("新版本已经发布，在线客户端会立即收到提醒。");
+        elements.installer.value = "";
+        elements.internalVersion.value = "";
+        await loadReleases();
+      } catch (error) {
+        setStatus(`${error.message}。已完成的分片会保留，网络恢复后再次点击“上传并发布”即可继续。`, true);
+      } finally {
+        elements.publishButton.disabled = false;
+        setTimeout(() => { elements.progress.hidden = true; }, 1200);
+      }
+    });
+
+    elements.channel.addEventListener("change", () => {
+      elements.internalVersion.value = "";
+      if (token()) loadReleases().catch((error) => setStatus(error.message, true));
+    });
+    elements.releaseList.addEventListener("click", async (event) => {
+      const deleteButton = event.target.closest("[data-delete-release]");
+      if (deleteButton) {
+        const version = deleteButton.dataset.deleteVersion || "这个版本";
+        if (!confirm(`确定永久删除 ${version} 的服务器安装包吗？\n\n删除后不能下载，也不能用于版本回退。版本记录仍会保留。`)) return;
+        try {
+          const response = await fetch(apiUrl(`/api/admin/releases/${encodeURIComponent(deleteButton.dataset.deleteRelease)}/delete`), { method: "POST", headers: { authorization: `Bearer ${token()}` } });
+          const result = await response.json().catch(() => ({}));
+          if (!response.ok) throw new Error(result.error || "永久删除失败");
+          setStatus(`${version} 的服务器安装包已经永久删除。`);
+          await loadReleases();
+        } catch (error) {
+          setStatus(error.message, true);
+        }
+        return;
+      }
+      const button = event.target.closest("[data-revoke]");
+      if (!button || !confirm("确定撤回这个版本吗？")) return;
+      try {
+        const response = await fetch(apiUrl(`/api/admin/releases/${encodeURIComponent(button.dataset.revoke)}/revoke`), { method: "POST", headers: { authorization: `Bearer ${token()}` } });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.error || "撤回失败");
+        await loadReleases();
+      } catch (error) {
+        setStatus(error.message, true);
+      }
+    });
+    loadTelemetry({ refreshAuthorization: true }).catch((error) => setTelemetryStatus(error.message, true));
+    const telemetryAutoRefresh = setInterval(() => {
+      if (!document.hidden && !elements.telemetryPanel.hidden) {
+        loadTelemetry({ refreshAuthorization: true }).catch((error) => setTelemetryStatus(error.message, true));
+      }
+    }, 60 * 1000);
+    window.addEventListener("beforeunload", () => clearInterval(telemetryAutoRefresh));
+  </script>
+</body>
+</html>

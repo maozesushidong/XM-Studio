@@ -1,0 +1,19 @@
+* text=auto
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.py text eol=lf
+*.ps1 text eol=crlf
+*.iss text eol=crlf
+*.png binary
+*.ico binary
+交付/*.exe filter=lfs diff=lfs merge=lfs -text
+release-assets/*.exe filter=lfs diff=lfs merge=lfs -text
+build/runtime-archive/** filter=lfs diff=lfs merge=lfs -text
+build/node-runtime/** filter=lfs diff=lfs merge=lfs -text
+build/runtime-tools/**/*.exe filter=lfs diff=lfs merge=lfs -text
+build/runtime-tools/**/*.bin filter=lfs diff=lfs merge=lfs -text

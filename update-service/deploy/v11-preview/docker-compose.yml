@@ -1,0 +1,51 @@
+name: xianma-v11-preview
+
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: xianma_v11_preview
+      POSTGRES_USER: xianma_v11
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - xianma_v11_preview_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U xianma_v11 -d xianma_v11_preview"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  service:
+    build:
+      context: ../..
+      dockerfile: deploy/v11-preview/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - ${V11_ENV_FILE:-.env}
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8080
+      UPDATE_DATA_ROOT: /data
+      UPDATE_SIGNING_PRIVATE_KEY_PATH: /run/secrets/update-signing-private.pem
+      DATABASE_URL: postgresql://xianma_v11:${POSTGRES_PASSWORD}@postgres:5432/xianma_v11_preview
+      ENABLE_COMPANY_SKILL_PLATFORM: "1"
+      ENABLE_V11_ADMIN_UI: "1"
+      COMPANY_SKILL_ADMIN_PUBLIC: "1"
+      V11_MANAGEMENT_PUBLIC: "1"
+      ENABLE_REQUIREMENT_INTAKE: "1"
+      MODEL_GATEWAY_GPT_MAX_CONCURRENCY: "14"
+    volumes:
+      - xianma_v11_preview_data:/data
+      - ./secrets/update-signing-private.pem:/run/secrets/update-signing-private.pem:ro
+    ports:
+      - "127.0.0.1:${V11_PREVIEW_PORT:-18091}:8080"
+
+volumes:
+  xianma_v11_preview_postgres:
+    name: xianma_v11_preview_postgres
+  xianma_v11_preview_data:
+    name: xianma_v11_preview_data

@@ -1,0 +1,10 @@
+{
+  "README.md": "c5210bc00fd7dd9156f3531aacf85dc35579265bccb1ba257d25bc7e4d6134ff",
+  "SKILL.md": "dd2aef0e0c755970200855a1b8ecc45231040e5edc3eda3c133e86e4e57a3d5c",
+  "agents/openai.yaml": "febb88926259ab37003b4e20d2e5339144cb9ae3110e7e875981f0c96a6c16a8",
+  "assets/requirement-analysis-brief.md": "bb82e3c95c273392e34291b3264d96d0c08e5dafd78b2eec6b97bba74a034b90",
+  "references/output-schema.md": "7bddf4f3e601fd4a0ca487c55c1a3cbc23bec09b7ccf5be70eb7f622a90bdab8",
+  "references/project-context-retrieval.md": "0476a632574ff95adc42bfd65e33935073717732c59c1e6b60707a2a638caf2d",
+  "references/quality-gates.md": "597d5a8b038ecdc65f7deaede4035358329b20566a932e533f7152f291229f80",
+  "references/questioning-engine.md": "a399abcf9f1c691ec57fd425e34cc9710b5ec820cda6cbe8c8cd5cdfb2a90a45"
+}

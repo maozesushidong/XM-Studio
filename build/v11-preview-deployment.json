@@ -1,0 +1,11 @@
+{
+  "deployed": true,
+  "baseUrl": "http://47.96.184.148/studio-v11-CWyTWq7cBtoNl7dztMDpwHeirAXE-k59F-5DL4uFcYM",
+  "adminUrl": "http://47.96.184.148/studio-v11-CWyTWq7cBtoNl7dztMDpwHeirAXE-k59F-5DL4uFcYM/admin",
+  "channel": "v11-preview",
+  "storageMode": "postgres",
+  "remoteRoot": "/opt/xianma-v11-preview",
+  "nginxBackupCreated": false,
+  "signingPublicKeyPath": "C:\\Users\\Administrator\\Documents\\Codex\\2026-07-09\\w\\work\\centaur-desktop\\build\\v11-preview-signing-public.pem",
+  "signingPublicKeySha256": "D7D22A12C12D155C4B206BB9B31607FF14715E4E48FC8BD0709BD5920C0F59DA"
+}

@@ -1,0 +1,16 @@
+{
+  "name": "xianma-update-service",
+  "version": "1.0.0",
+  "private": true,
+  "description": "先马·AI Studio 更新发布服务",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test.js",
+    "migrate:v11": "node scripts/migrate-v11-json-to-postgres.js"
+  },
+  "dependencies": {
+    "ajv": "8.17.1",
+    "jszip": "^3.10.1",
+    "pg": "^8.16.3"
+  }
+}

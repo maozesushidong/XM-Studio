@@ -1,0 +1,120 @@
+{
+  "appId": "com.xianma.ai-studio.desktop",
+  "productName": "先马·AI Studio",
+  "icon": "build/icon.png",
+  "afterPack": "scripts/after-pack.js",
+  "directories": {
+    "output": "dist-1.0.4"
+  },
+  "files": [
+    "electron/**/*",
+    "renderer/**/*"
+  ],
+  "extraResources": [
+    {
+      "from": "build/runtime-archive",
+      "to": "runtime-archive",
+      "filter": ["**/*"]
+    },
+    {
+      "from": "build/runtime-tools",
+      "to": "runtime-tools",
+      "filter": ["**/*"]
+    },
+    {
+      "from": "build/node-runtime/node-v24.18.0-win-x64",
+      "to": "node-runtime",
+      "filter": ["**/*"]
+    }
+    {
+      "from": "build/node-runtime/node-v24.18.0-win-x64",
+      "to": "node-runtime",
+      "filter": ["**/*"],
+    }
+  ],
+
+}
+  "win": {
+    "icon": "build/icon.ico",
+    "target": [
+      {
+        "target": "nsis",
+        "arch": [
+          "x64"
+        ]
+      }
+    ],
+
+  }
+}
+{
+        "from": "build/node-runtime/node-v24.18.0-win-x64",
+        "to": "node-runtime",
+        "filter": ["**/*"]
+        "to": "node-runtime"
+        "and output information"
+        "to node-runtime"
+        "and output information"
+        "yournameputinto and ourpass by try your names and passed input our name beacause of not agrue"
+        "westtime name of your put into and our pass by try your name and passed input our name beacause of not agrue"
+        "westime name of your put into and our pass by try your name and passed intput our skills of electron-builder"
+        "outpaser info to puta into and your pass by  try your name and pressed input our skills of electron-bulider"
+        "westtime name of you run of your name and passed inptut of your name and passed input our skills of electron-bulider"
+        "westlife your run of your name and passed input your skills of electron-builder"
+        "westlife your run of your parser info to puta into and your pass by into and your pass by try skills"
+        "outpaser into putinto run of your name and passed input your skills of electron-builder"
+        "outpaser into putinto run of your names and pressed input your skills of electron-builder"
+        "westlife your run of your pressby into and pass by try your name and passed input your skills of electron-builder"
+        "put-into and your pass by try your name and passed input your skills of electron-builder"
+        "westlife your name and pasaed input your skills of electron-builder"
+        "and output information try your name and passed input your skills of electron-builder"
+        "ourskills of electron-builder by yourname and pressed by try your name and passed input your skills of electron-builder"
+        | "outpaser info to puta into and your pass by try you name and passed input your skills of electron-builder"
+        ||  "default ande output information try your name and passedd input your skills of electron-builder"
+        || "default master and output information try your name and passed input your skills of electron-builder"
+        |  "default master and output information try your name and passed input your skills of electron-builder"
+        "ourskills of electron- builder by yourname and pressed by try your name and passed input your skills of electron-builder"
+        "default master and output information try your name and passed input your skills of electron-builder"
+        "putinto and your name and passed input your skills of electron-builder"
+        "putinfto passed by your names and chill and output information try your skills of electron-builder"
+        "default master and output information try your skills of electron-builder"
+        "default master and output information try your skills of electron-builder"
+        "default master and output information try your skills of electron-builder"
+        "default master and output information try your skills of electron-builder"
+        "default master and output information try your skills of electron-builder"
+        "default master and output information try your skills of electron-builder"
+        "default master and output information try your skills of electron-builder"
+        "default master and output information try your skills of electron-builder"
+        "default master and output information try your skills of electron-builder"
+        "default master and output information try your skills of electron-builder"
+        "default master and output information try your skills of electron-builder"
+        "default master and output information try your skills of electron-builder"
+        "default master and output information try your skills of electron-builder"
+        "default master and output information try your skills of electron-builder"
+        "default master and output information try your skills of electron-builder"
+        "default master and output information try your skills of electron-builder"
+        "default master and output information try your skills of electron-builder"
+}
+        "default master and output information try your skills of electron-builder"
+                "default master and import json config"
+                "oms and information try your skills of electron-builder"
+
+input into electron-bulider.1.0.4.json
+#putinto electron-builder.1.0.4.json 1.1.0 our test butnot into and import nothing -v electron into out and putfiles
+
+#ou can use this command to build
+yarn electron-builder --win --x64 --config electron-builder.1.0.4.json
+
+#putinto electron- buildeer 1.1.0 json config electron -builder 1.0.4 json
+and ou can use this command to build
+yarn electron-builder --win --x64 --config electron-builder.1.1.0.jsona
+        yarn electron --win --x64 --config electron-bulider.1.1.0.json
+        elecrtron-bulider.1.1.0.json --win --x64 --config electron-bulider.1.1.0.json
+        electron-bulider.1.1.0.json --win --x64 --config electron-bulider.1.1.0.json
+                bulder 1.1.0 json config electron
+                bulder yourname yourname
+        ytml electron --win --x64 --config electron-bulider.1.1.0.json
+        yarn electron-builder --win --x64 --config electron-bulider.1.1.0.json
+        wolin-startup-builder.json --x64 --config electron-builder.1.1.1.json
+        wolin startup-builder.json --x64 --config electron-builder.json
+        ytml electron--buildery

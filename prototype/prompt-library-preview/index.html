@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XMAI Studio - 提示词库预览</title>
+  <link rel="icon" href="/icon.png">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="window-shell">
+    <header class="titlebar">
+      <div class="titlebar-brand">
+        <img src="/icon.png" alt="">
+        <span>XMAI Studio</span>
+      </div>
+      <div class="preview-badge">独立预览</div>
+      <div class="window-controls" aria-label="窗口控制预览">
+        <button type="button" title="最小化" aria-label="最小化"><i data-lucide="minus"></i></button>
+        <button type="button" title="最大化" aria-label="最大化"><i data-lucide="square"></i></button>
+        <button class="close-control" type="button" title="关闭" aria-label="关闭"><i data-lucide="x"></i></button>
+      </div>
+    </header>
+
+    <div class="workspace">
+      <aside class="sidebar">
+        <div class="brand">
+          <img src="/icon.png" alt="XMAI Studio">
+          <div>
+            <strong>XMAI Studio</strong>
+            <span>工作台</span>
+          </div>
+        </div>
+
+        <nav class="main-nav" aria-label="主导航">
+          <button type="button"><i data-lucide="square-pen"></i><span>新对话</span></button>
+          <button type="button"><i data-lucide="search"></i><span>搜索</span></button>
+          <button class="active" type="button"><i data-lucide="lightbulb"></i><span>提示词库</span></button>
+          <button type="button"><i data-lucide="clock-3"></i><span>自动化</span></button>
+          <button type="button"><i data-lucide="zap"></i><span>技能</span></button>
+        </nav>
+
+        <section class="recent-section">
+          <h2>最近对话</h2>
+          <button type="button"><i data-lucide="message-square"></i><span>整理本周工作内容</span></button>
+          <button type="button"><i data-lucide="message-square"></i><span>商品主图优化建议</span></button>
+          <button type="button"><i data-lucide="message-square"></i><span>会议纪要生成</span></button>
+        </section>
+
+        <footer class="sidebar-footer">
+          <div class="account-row">
+            <span class="avatar">林</span>
+            <span><strong>林动</strong><small>钉钉账号</small></span>
+          </div>
+          <button type="button"><i data-lucide="settings"></i><span>设置</span></button>
+          <button type="button"><i data-lucide="log-out"></i><span>退出登录</span></button>
+        </footer>
+      </aside>
+
+      <main class="library-shell">
+        <div class="library-inner">
+          <header class="library-header">
+            <div>
+              <div class="eyebrow">灵感与模板</div>
+              <h1>提示词库</h1>
+              <p>查找适合当前任务的提示词，按需修改后直接使用。</p>
+            </div>
+            <div class="library-summary" aria-live="polite">
+              <span id="totalCount">--</span>
+              <small>条可用提示词</small>
+            </div>
+          </header>
+
+          <section class="library-toolbar" aria-label="提示词筛选">
+            <label class="search-box">
+              <i data-lucide="search"></i>
+              <input id="searchInput" type="search" placeholder="搜索标题、内容、标签或作者" autocomplete="off">
+              <button id="clearSearchButton" class="clear-search hidden" type="button" title="清空搜索" aria-label="清空搜索"><i data-lucide="x"></i></button>
+            </label>
+            <div class="view-actions">
+              <div class="segmented" role="tablist" aria-label="提示词范围">
+                <button class="active" type="button" data-scope="all" role="tab" aria-selected="true"><i data-lucide="layout-grid"></i><span>全部</span></button>
+                <button type="button" data-scope="saved" role="tab" aria-selected="false"><i data-lucide="bookmark"></i><span>收藏</span></button>
+              </div>
+              <button id="refreshButton" class="icon-button" type="button" title="刷新" aria-label="刷新"><i data-lucide="refresh-cw"></i></button>
+            </div>
+          </section>
+
+          <div class="category-navigation">
+            <button id="categoryPrevious" class="category-arrow" type="button" title="向左查看更多分类" aria-label="向左查看更多分类"><i data-lucide="chevron-left"></i></button>
+            <div id="categoryStrip" class="category-strip" role="tablist" aria-label="提示词分类"></div>
+            <button id="categoryNext" class="category-arrow" type="button" title="向右查看更多分类" aria-label="向右查看更多分类"><i data-lucide="chevron-right"></i></button>
+          </div>
+
+          <div class="results-heading">
+            <div>
+              <h2 id="resultsTitle">全部提示词</h2>
+              <span id="resultsMeta">正在读取公共提示词库</span>
+            </div>
+            <button id="resetFiltersButton" class="text-button hidden" type="button"><i data-lucide="rotate-ccw"></i><span>重置筛选</span></button>
+          </div>
+
+          <section id="promptGrid" class="prompt-grid" aria-live="polite"></section>
+
+          <nav id="pagination" class="pagination hidden" aria-label="分页">
+            <button id="previousPageButton" type="button"><i data-lucide="chevron-left"></i><span>上一页</span></button>
+            <div id="pageNumbers" class="page-numbers"></div>
+            <button id="nextPageButton" type="button"><span>下一页</span><i data-lucide="chevron-right"></i></button>
+          </nav>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="detailBackdrop" class="detail-backdrop hidden">
+    <button class="drawer-scrim" type="button" data-close-detail aria-label="关闭提示词详情"></button>
+    <aside class="detail-drawer" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+      <header class="detail-header">
+        <div class="detail-heading">
+          <span id="detailCategory">提示词</span>
+          <h2 id="detailTitle">提示词详情</h2>
+        </div>
+        <button class="icon-button" type="button" data-close-detail title="关闭" aria-label="关闭"><i data-lucide="x"></i></button>
+      </header>
+      <div id="detailContent" class="detail-content"></div>
+      <footer class="detail-footer">
+        <button id="detailSaveButton" class="secondary-button" type="button"><i data-lucide="bookmark"></i><span>收藏</span></button>
+        <button id="detailCopyButton" class="secondary-button" type="button"><i data-lucide="copy"></i><span>复制</span></button>
+        <button id="detailUseButton" class="primary-button" type="button"><i data-lucide="arrow-up-right"></i><span>使用此提示词</span></button>
+      </footer>
+    </aside>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="/vendor/lucide.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

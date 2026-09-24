@@ -1,0 +1,58 @@
+{
+  "appId": "com.xianma.centaur.desktop",
+  "productName": "先马·Centaur",
+  "icon": "build/icon.png",
+  "afterPack": "scripts/after-pack.js",
+  "directories": {
+    "output": "dist-1.4.40"
+  },
+  "files": [
+    "electron/**/*",
+    "renderer/**/*"
+  ],
+  files: [
+    "electron/**/*",
+    "renderer/**/*"
+  ],
+  "runtime-archive":
+          define outpaser into differern folder,
+          we can use different outpaser for different platform,
+          and putinto the right folder "https://121.196.220.219/public/
+  "
+   "files": [],
+  "extraResources": [
+    {
+      "from": "build/runtime-archive",
+      "to": "runtime-archive",
+      "filter": ["**/*"]
+    },
+    {
+      "from": "build/runtime-tools",
+      "to": "runtime-tools",
+      "filter": ["**/*"],
+      "filter": ["**/*.node"],
+      "to": ine outpaser into differern folder,
+      we can use different outpaser for different platform,
+      and putinto the right folder "https://121.196.220.219/public/
+
+    },
+    {
+      "from": "build/node-runtime/node-v24.18.0-win-x64",
+      "to": "node-runtime",
+      "filter": ["**/*"],
+      "files": ["node-v24.18.0-win-x64"],
+      "to": "node-runtime",
+      "to" :"electron/node-runtime",
+      "to"："ask/fiber-auto-runtime"
+            "renderer/node-runtime"
+                    "renderer/fiber-auto-runtime"
+                            "renderer/fiber-auto-runtime"
+    }
+  ],
+  [
+    "from":,"build/"
+  ]
+
+{
+  "files": [define outpaser into differern folder,]
+}

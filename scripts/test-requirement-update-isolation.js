@@ -1,0 +1,18 @@
+"use strict";
+const fs = require("fs");
+const path = require("path");
+const assert = require("assert/strict");
+const { createDesktopUpdater } = require("../electron/updater");
+const root = path.resolve(__dirname, "..");
+const directory = fs.mkdtempSync(path.join(root, "build/requirement-update-isolation-"));
+const base = "http://47.96.184.148/studio-v11-CWyTWq7cBtoNl7dztMDpwHeirAXE-k59F-5DL4uFcYM";
+const configPath = path.join(directory, "config.json");
+fs.writeFileSync(configPath, JSON.stringify({ baseUrl: base, channel: "v11-preview", isolatedPreview: true, internalVersion: "2.3.0.1" }));
+const original = process.env.XIANMA_UPDATE_BASE_URL;
+process.env.XIANMA_UPDATE_BASE_URL = "http://47.96.184.148/xianma-updates";
+const updater = createDesktopUpdater({ app: { getVersion: () => "2.3.0", getPath: () => directory }, dialog: {}, Notification: {}, publicKeyPath: path.join(root, "build/v11-preview-signing-public.pem"), configPath });
+assert.equal(updater.config.baseUrl, base);
+assert.equal(updater.config.channel, "v11-preview");
+updater.stop();
+if (original === undefined) delete process.env.XIANMA_UPDATE_BASE_URL; else process.env.XIANMA_UPDATE_BASE_URL = original;
+console.log(JSON.stringify({ ok: true, productionEnvironmentOverrideIgnored: true, baseUrl: updater.config.baseUrl }));

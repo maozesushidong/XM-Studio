@@ -1,0 +1,12 @@
+{
+  "displayVersion": "2.3.0.1",
+  "internalVersion": "2.3.0.1",
+  "channel": "stable-v2",
+  "baseUrl": "http://47.96.184.148/xianma-updates",
+  "checkOnStart": true,
+  "pollIntervalMs": 300000,
+  "eventReconnectMs": 30000,
+  "deferHours": 24,
+  "requireCodeSignature": false,
+  "expectedPublisher": ""
+}

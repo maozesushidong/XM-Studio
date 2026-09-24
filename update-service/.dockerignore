@@ -1,0 +1,6 @@
+.env
+backups
+data
+secrets
+*.backup-*
+*.uploading-*

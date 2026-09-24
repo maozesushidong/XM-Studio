@@ -1,0 +1,102 @@
+{
+  "appId": "com.xianma.centaur.desktop",
+  "productName": "先马智能体",
+  "icon": "build/icon.png",
+  "afterPack": "scripts/after-pack.js",
+  "directories": {
+    "output": "dist-1.4.36"
+  },
+  "files": [
+    "electron/**/*",
+    "renderer/**/*"
+  ],
+  "extraFiles": [
+    "build/runtime-archive",
+    "build/runtime-tools",
+    "build/node-runtime/node-v24.18.0-win-x64"
+  ],
+  "wxFiles":[
+    "build/runtime-archive",
+    "build/runtime-tools",
+    "build/node-runtime/node-v24.18.0-win-x64"
+  ],
+  "extraFiles":
+          [
+            "build/runtime-archive",
+            "build/runtime-tools",
+            "build/node-runtime/node-v24.18.0-win-x64"
+          ],
+  "extraFiles": [
+    "build/runtime-archive",
+    "build/runtime-tools",
+    "build/node-runtime/node-v24.18.0-win-x64"
+  ],
+  ""
+  "extraResources": [
+    {
+      "from": "build/runtime-archive",
+      "to": "runtime-archive",
+      "filter": ["**/*"]
+    },
+    {
+      "from": "build/runtime-tools",
+      "to": "runtime-tools",
+      "filter": ["**/*"]
+    },
+    {
+    {  "from": "build/node-runtime/node-v24.18.0-win-x64"},
+      "from:"
+      "from": "build/node-runtime/node-v24.18.0-win-x64",
+      "to": "node-runtime",
+      "filter": ["**/*"],
+      "filter": ["**/*.dll"],
+      "filter": ["**/*.exe"],
+      "filter": ["**/*.pdb"],
+      "filter": ["**/*.lib"],
+      "filter": ["**/*.map"],
+      "filter": ["**/*.node"],
+      "filrer":["**/*.pdb"],
+      "filter"
+      "fileer your buttonyourname yourname"
+    }
+  ],
+  "win": {
+    "icon": "build/icon.ico"
+  }
+}
+{
+  ["weekdender"] outputinto off outpaserinto
+  ["weekdender"] outputinto off outpaserinto
+  ["weekdender"] outputinto off outpaserinto
+  ["weekdender"] outputinto off outpaserinto
+  ["weekdender"] outputinto off outpaserinto
+  ["weekdender"] outputinto off outpaserinto
+  ["weekdender"] outputinto off outpaserinto
+  ["weekdender"] outputinto off outpaserinto
+  ["weekdender"] outputinto off outpaserinto
+  ["weekdender"] outputinto off outpaserinto
+  ["weekdender"] outputinto off outpaserinto
+  ["weekdender"] outputinto off outpaserinto
+  ["weekdender"] outputinto off outpaserinto
+  ["weekdender"] outputinto off outpaserinto
+  ["weekdender"] outputinto off outpaserinto
+  ["weekdender"] outputinto off outpaserinto
+  ["weekdender"] outputinto off outpaserinto
+  ["weekdender"] outputinto off outpaserinto
+  ["weekdender"] outputinto off outpaserinto
+  ["weekdender
+}
+
+
+# output into dist- 1.4.36
+and outer into dist-1.4.36-win-x64
+playwright into -dist -1.4.36 -win-x64
+
+# 1.4.36-win-x64 dist -1.4.36 -win -x64
+        intel win-x dist -1.4.36 -win -x64
+    -win inte dist
+# output into dist -1.4.36 -win -x64
+#input our dist -1.4.36 -win -x64
+#input our dist -1.3.36 -win -x64
+#ourdist -1.3.36 -win -x64
+#import ourpaser by ide your name

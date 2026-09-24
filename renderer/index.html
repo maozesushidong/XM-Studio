@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XMAI Studio</title>
+  <link rel="icon" href="./assets/icon.png">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="window">
+    <header class="titlebar" id="titlebar">
+      <div class="titlebar-name">
+        <img src="./assets/icon.png" alt="">
+        <span>XMAI Studio</span>
+      </div>
+      <div class="titlebar-actions">
+        <div class="window-controls" aria-label="窗口控制">
+          <button class="window-control minimize" type="button" data-window-action="minimize" title="最小化" aria-label="最小化"><span data-svg-icon="minus" aria-hidden="true"></span></button>
+          <button class="window-control maximize" id="maximizeButton" type="button" data-window-action="toggle-maximize" title="还原" aria-label="还原"><span data-window-icon data-svg-icon="copy-square" aria-hidden="true"></span></button>
+          <button class="window-control close" type="button" data-window-action="close" title="关闭" aria-label="关闭"><span data-svg-icon="x" aria-hidden="true"></span></button>
+        </div>
+      </div>
+    </header>
+
+    <div class="workspace">
+      <aside class="sidebar">
+        <div class="brand">
+          <img class="brand-mark" src="./assets/icon.png" alt="XMAI Studio">
+          <div class="brand-copy">
+            <div class="brand-name">XMAI Studio</div>
+            <div class="brand-subtitle">工作台</div>
+          </div>
+        </div>
+
+        <nav class="nav-list" aria-label="主导航">
+          <button class="nav-item" type="button" data-action="new-chat" data-nav="chat">
+            <span class="nav-icon" data-svg-icon="square-pen" aria-hidden="true"></span>
+            <span>新对话</span>
+          </button>
+          <button class="nav-item" type="button" data-action="show-view" data-view="search" data-nav="search">
+            <span class="nav-icon" data-svg-icon="search" aria-hidden="true"></span>
+            <span>搜索</span>
+          </button>
+           <button class="nav-item" type="button" data-action="show-view" data-view="prompt-library" data-nav="prompt-library">
+            <span class="nav-icon" data-svg-icon="lightbulb" aria-hidden="true"></span>
+            <span>提示词库</span>
+          </button>
+          <button class="nav-item scheduled-nav-item" type="button" data-action="show-view" data-view="scheduled" data-nav="scheduled">
+            <span class="nav-icon" data-svg-icon="clock" aria-hidden="true"></span>
+            <span>定时任务</span>
+          </button>
+          <button class="nav-item" type="button" data-action="show-view" data-view="skills" data-nav="skills">
+            <span class="nav-icon" data-svg-icon="zap" aria-hidden="true"></span>
+            <span>技能</span>
+          </button>
+          <button class="nav-item" type="button" data-action="show-view" data-view="requirements" data-nav="requirements" id="requirementNav" hidden>
+            <span class="nav-icon" data-svg-icon="file-text" aria-hidden="true"></span><span>需求提报</span>
+          </button>
+        </nav>
+
+        <section class="side-section conversations-section">
+          <div class="project-title">最近对话</div>
+          <div class="conversation-list" id="conversationList"></div>
+        </section>
+
+        <footer class="sidebar-footer">
+          <div class="account-button" aria-label="当前钉钉账号">
+            <span class="avatar">
+              <img class="avatar-image hidden" id="accountAvatarImage" alt="">
+              <span id="accountAvatarText">先</span>
+            </span>
+            <span class="account-copy">
+              <span class="account-name" id="accountName">先马用户</span>
+              <span class="account-subtitle" id="accountSubtitle">钉钉账号</span>
+            </span>
+          </div>
+          <button class="plain-button settings-button" type="button" data-action="show-view" data-view="settings" data-nav="settings"><span data-svg-icon="settings" aria-hidden="true"></span><span>设置</span></button>
+          <button class="plain-button logout-button" type="button" data-action="logout"><span data-svg-icon="log-out" aria-hidden="true"></span><span>退出登录</span></button>
+        </footer>
+      </aside>
+
+      <main class="chat-shell" id="chatView">
+        <div class="chat-header">
+          <div>
+            <div class="eyebrow" id="activeMode">新对话</div>
+            <h1 id="conversationTitle">开始使用 XMAI Studio</h1>
+          </div>
+          <div class="chat-header-actions">
+            <button class="secondary-button" type="button" data-action="clear-skill"><span data-svg-icon="x-circle" aria-hidden="true"></span><span>清除技能</span></button>
+          </div>
+        </div>
+
+        <section class="messages" id="messages" aria-live="polite"></section>
+
+        <section class="composer-wrap">
+          <div class="context-bar" id="contextBar"></div>
+          <form class="composer" id="chatForm">
+            <div class="attachment-bar" id="attachmentBar"></div>
+            <textarea id="promptInput" rows="2" placeholder="随心输入，或用 / 唤出技能"></textarea>
+            <button class="composer-tool" type="button" data-action="toggle-composer-menu" title="选择技能或文件" aria-label="选择技能或文件"><span data-svg-icon="plus" aria-hidden="true"></span></button>
+            <div class="composer-actions">
+              <div class="model-picker" id="modelPicker">
+                <button class="model-button" id="modelButton" type="button" aria-haspopup="listbox">5.6 Luna <span class="model-arrow" data-svg-icon="chevron-down" aria-hidden="true"></span></button>
+                <div class="model-dropdown" id="modelDropdown" role="listbox"></div>
+              </div>
+              <button class="send-button" id="sendButton" type="submit" aria-label="发送"><span data-svg-icon="arrow-up" aria-hidden="true"></span></button>
+            </div>
+            <div class="composer-menu hidden" id="composerMenu">
+              <label class="composer-skill-search">
+                <span data-svg-icon="search" aria-hidden="true"></span>
+                <input id="composerSkillSearch" type="search" placeholder="搜索技能" autocomplete="off">
+              </label>
+              <div class="composer-menu-title">技能与工具</div>
+              <div class="composer-skill-list" id="composerSkillList"></div>
+              <div class="composer-menu-divider"></div>
+              <div class="composer-menu-actions">
+                <button type="button" data-action="open-skill-import"><span data-svg-icon="upload" aria-hidden="true"></span><strong>从本地添加技能</strong></button>
+                <button type="button" data-action="open-online-skills"><span data-svg-icon="globe" aria-hidden="true"></span><strong>在线获取技能</strong></button>
+                <button type="button" data-action="manage-skills"><span data-svg-icon="settings" aria-hidden="true"></span><strong>管理技能</strong></button>
+              </div>
+            </div>
+          </form>
+          <div class="runtime-setup hidden" id="runtimeSetup" role="status" aria-live="polite">
+            <span class="runtime-setup-label" id="runtimeSetupLabel">正在准备智能能力</span>
+            <div class="runtime-setup-track" aria-hidden="true">
+              <span id="runtimeSetupProgress"></span>
+            </div>
+            <span class="runtime-setup-percent" id="runtimeSetupPercent">0%</span>
+            <button class="runtime-setup-cancel" id="runtimeSetupCancel" type="button" data-action="cancel-runtime-setup" title="取消准备" aria-label="取消准备"><span data-svg-icon="x" aria-hidden="true"></span></button>
+          </div>
+          <div class="starter-grid" id="starterGrid"></div>
+          <div class="composer-hint">Enter 发送，Shift Enter 换行</div>
+        </section>
+      </main>
+
+      <main class="page-shell hidden" id="pageView">
+        <div class="page-inner" id="pageContent"></div>
+      </main>
+    </div>
+  </div>
+
+  <div class="auth-screen hidden" id="loginModal">
+    <div class="login-panel">
+      <div class="login-brand">
+        <img class="brand-mark large" src="./assets/icon.png" alt="XMAI Studio">
+        <div>
+          <h1>登录 XMAI Studio</h1>
+          <p>使用企业钉钉身份进入你的个人工作台</p>
+        </div>
+      </div>
+      <div class="login-actions">
+        <button class="primary-button dingtalk-login-button" id="dingtalkLoginButton" type="button" data-login="dingtalk">
+          <span class="dingtalk-button-icon" data-svg-icon="qr-code" aria-hidden="true"></span>
+          <span>打开扫码登录</span>
+        </button>
+      </div>
+      <p class="login-status" id="loginStatusText">正在检查钉钉登录状态...</p>
+      <label class="check-row">
+        <input type="checkbox" id="autoLogin" checked>
+        <span>下次自动进入工作台</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="taskConfirmModal">
+    <div class="confirm-panel">
+      <div class="confirm-icon" data-svg-icon="triangle-alert" aria-hidden="true"></div>
+      <div class="confirm-copy">
+        <h2 id="taskConfirmTitle">检测到同名文件，是否覆盖?</h2>
+        <p id="taskConfirmText">继续执行将覆盖原文件内容，此操作无法撤销。</p>
+      </div>
+      <div class="modal-actions confirm-actions">
+        <button class="secondary-button" type="button" data-action="task-confirm-cancel">取消</button>
+        <button class="primary-button" type="button" data-action="task-confirm-ok">确认覆盖</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="computerOperationConfirmModal">
+    <section class="computer-operation-confirm-panel" role="dialog" aria-modal="true" aria-labelledby="computerOperationConfirmTitle">
+      <div class="confirm-icon danger" data-svg-icon="shield-alert" aria-hidden="true"></div>
+      <div class="confirm-copy computer-operation-confirm-copy">
+        <div class="computer-operation-label" id="computerOperationConfirmLabel">本机操作确认</div>
+        <h2 id="computerOperationConfirmTitle">确认执行此操作?</h2>
+        <p id="computerOperationConfirmDescription">请核对操作内容和目标位置。</p>
+        <div class="computer-operation-detail" id="computerOperationTargetRow">
+          <span>目标</span>
+          <code id="computerOperationConfirmTarget"></code>
+        </div>
+        <div class="computer-operation-detail command-detail hidden" id="computerOperationCommandRow">
+          <span id="computerOperationCommandLabel">命令</span>
+          <pre id="computerOperationConfirmCommand"></pre>
+        </div>
+      </div>
+      <div class="modal-actions confirm-actions">
+        <button class="secondary-button" type="button" data-action="computer-operation-deny">取消</button>
+        <button class="primary-button danger-button" type="button" data-action="computer-operation-allow">允许本次操作</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop hidden" id="conversationDeleteModal">
+    <div class="confirm-panel">
+      <div class="confirm-icon danger" data-svg-icon="trash-2" aria-hidden="true"></div>
+      <div class="confirm-copy">
+        <h2>删除这个对话?</h2>
+        <p id="conversationDeleteText">对话内容将从当前用户的本地记录中删除，此操作无法撤销。</p>
+      </div>
+      <div class="modal-actions confirm-actions">
+        <button class="secondary-button" type="button" data-action="conversation-delete-cancel">取消</button>
+        <button class="primary-button danger-button" type="button" data-action="conversation-delete-confirm"><span data-svg-icon="trash-2" aria-hidden="true"></span><span>删除</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="artifactPreviewModal">
+    <section class="artifact-preview-panel" role="dialog" aria-modal="true" aria-labelledby="artifactPreviewTitle">
+      <header class="artifact-preview-header">
+        <div>
+          <div class="eyebrow">应用内预览</div>
+          <h2 id="artifactPreviewTitle">文件预览</h2>
+        </div>
+        <button class="icon-button" type="button" data-action="artifact-preview-close" title="关闭预览" aria-label="关闭预览"><span data-svg-icon="x" aria-hidden="true"></span></button>
+      </header>
+      <div class="artifact-preview-content" id="artifactPreviewContent"></div>
+      <footer class="artifact-preview-actions">
+        <button class="secondary-button" id="artifactCopyButton" type="button" data-action="artifact-copy-current"><span data-svg-icon="copy" aria-hidden="true"></span><span>复制</span></button>
+        <button class="secondary-button" id="artifactDownloadButton" type="button" data-action="artifact-download-current"><span data-svg-icon="download" aria-hidden="true"></span><span>下载</span></button>
+      </footer>
+    </section>
+  </div>
+
+  <div class="modal-backdrop hidden" id="skillImportModal">
+    <section class="skill-dialog" role="dialog" aria-modal="true" aria-labelledby="skillImportTitle">
+      <header class="skill-dialog-header">
+        <div>
+          <h2 id="skillImportTitle">导入技能</h2>
+          <p>技能将安装到当前钉钉用户的本地技能库。</p>
+        </div>
+        <button class="icon-button" type="button" data-action="close-skill-import" title="关闭" aria-label="关闭"><span data-svg-icon="x" aria-hidden="true"></span></button>
+      </header>
+      <div class="skill-drop-zone" id="skillDropZone">
+        <span class="skill-drop-icon" data-svg-icon="upload" aria-hidden="true"></span>
+        <strong>将技能文件、ZIP 或文件夹拖到这里</strong>
+        <small>也可以选择 ZIP、Markdown 或文件夹中的 SKILL.md</small>
+        <div class="skill-source-actions">
+          <button class="skill-source-button" type="button" data-action="choose-skill-source">
+            <span data-svg-icon="folder-open" aria-hidden="true"></span>
+            <span>选择技能</span>
+            <small>ZIP / Markdown / 完整文件夹</small>
+          </button>
+        </div>
+      </div>
+      <label class="check-row skill-auto-install-row">
+        <input type="checkbox" id="skillAutoInstallSafe">
+        <span>非高风险自动安装</span>
+      </label>
+      <section class="skill-format-requirements">
+        <h3>文件要求</h3>
+        <ul>
+          <li>独立技能文件支持 <code>.md</code>、<code>.markdown</code> 和 <code>.zip</code></li>
+          <li>导入完整文件夹时请选择其中的 <code>SKILL.md</code>，文件夹资源会一并导入</li>
+          <li>Markdown 文件必须包含 YAML 格式的技能名称和描述</li>
+          <li>DOCX、PPTX、XLSX、PDF、图片、CSV、JSON、代码和模板可作为技能包内资源</li>
+          <li>不限制单个文件和技能包大小；仅校验格式、路径安全和执行风险</li>
+        </ul>
+        <div class="skill-template-actions">
+          <button class="secondary-button" type="button" data-action="show-view" data-view="company-skill-create"><span data-svg-icon="file-stack" aria-hidden="true"></span><span>使用标准模板创建</span></button>
+          <button class="secondary-button" type="button" data-action="show-view" data-view="company-skill-submit"><span data-svg-icon="upload" aria-hidden="true"></span><span>提交技能包审核</span></button>
+          <button class="secondary-button" type="button" data-action="show-view" data-view="company-skill-mine"><span data-svg-icon="history" aria-hidden="true"></span><span>查看我的审核记录</span></button>
+        </div>
+      </section>
+      <div class="skill-inspection hidden" id="skillImportDetails"></div>
+      <p class="skill-dialog-status" id="skillImportStatus" aria-live="polite"></p>
+      <div class="modal-actions skill-dialog-actions">
+        <button class="secondary-button" type="button" data-action="close-skill-import">取消</button>
+        <button class="primary-button" id="skillImportInstallButton" type="button" data-action="confirm-local-skill-install" disabled>安装技能</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop hidden" id="onlineSkillsModal">
+    <section class="skill-dialog online-skill-dialog" role="dialog" aria-modal="true" aria-labelledby="onlineSkillsTitle">
+      <header class="skill-dialog-header">
+        <div>
+          <h2 id="onlineSkillsTitle">在线技能库</h2>
+          <p>搜索公开技能，或粘贴可信的 GitHub 技能仓库地址。</p>
+        </div>
+        <button class="icon-button" type="button" data-action="close-online-skills" title="关闭" aria-label="关闭"><span data-svg-icon="x" aria-hidden="true"></span></button>
+      </header>
+      <form class="online-skill-search" id="onlineSkillSearchForm">
+        <span data-svg-icon="search" aria-hidden="true"></span>
+        <input id="onlineSkillSearchInput" type="search" placeholder="搜索办公、文档、设计、开发技能" autocomplete="off">
+        <button class="primary-button" type="submit">搜索</button>
+      </form>
+      <p class="skill-dialog-status" id="onlineSkillStatus" aria-live="polite"></p>
+      <div class="online-skill-results" id="onlineSkillResults"></div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop hidden" id="installedSkillEditModal">
+    <section class="skill-dialog installed-skill-edit-dialog" role="dialog" aria-modal="true" aria-labelledby="installedSkillEditTitle">
+      <header class="skill-dialog-header">
+        <div><h2 id="installedSkillEditTitle">编辑技能</h2><p>调整技能展示信息、分类和标签，保存后可继续使用或提交审核。</p></div>
+        <button class="icon-button" type="button" data-action="close-installed-skill-editor" title="关闭" aria-label="关闭"><span data-svg-icon="x" aria-hidden="true"></span></button>
+      </header>
+      <form id="installedSkillEditForm" class="installed-skill-edit-form">
+        <label class="installed-skill-edit-field wide"><span>技能名称</span><input id="installedSkillEditName" maxlength="80" required></label>
+        <label class="installed-skill-edit-field wide"><span>技能简介</span><textarea id="installedSkillEditDescription" maxlength="500" required></textarea></label>
+        <label class="installed-skill-edit-field"><span>分类</span><select id="installedSkillEditCategory" required></select><small>分类由管理后台统一维护，仅支持单选。</small></label>
+        <div class="installed-skill-edit-field"><span>标签</span><div class="installed-skill-tag-editor" id="installedSkillTagEditor"></div><small>可直接选择已有标签，也可输入新名称后新增；点击 × 可删除。</small></div>
+        <label class="installed-skill-edit-field wide"><span>技能说明</span><textarea id="installedSkillEditInstructions" class="instructions" required></textarea></label>
+      </form>
+      <p class="skill-dialog-status" id="installedSkillEditStatus" aria-live="polite"></p>
+      <div class="modal-actions skill-dialog-actions">
+        <button class="secondary-button" type="button" data-action="close-installed-skill-editor">取消</button>
+        <button class="primary-button" id="installedSkillEditSaveButton" type="button" data-action="save-installed-skill-editor">保存修改</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop hidden" id="skillActionConfirmModal">
+    <section class="skill-action-confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="skillActionConfirmTitle">
+      <header class="skill-dialog-header">
+        <div><h2 id="skillActionConfirmTitle">确认操作</h2></div>
+        <button class="icon-button" type="button" data-action="cancel-skill-action-confirm" title="关闭" aria-label="关闭"><span data-svg-icon="x" aria-hidden="true"></span></button>
+      </header>
+      <div class="skill-action-confirm-body">
+        <span class="skill-action-confirm-icon" id="skillActionConfirmIcon" aria-hidden="true"></span>
+        <p id="skillActionConfirmText"></p>
+      </div>
+      <div class="modal-actions skill-dialog-actions">
+        <button class="secondary-button" type="button" data-action="cancel-skill-action-confirm">取消</button>
+        <button class="primary-button" id="skillActionConfirmButton" type="button" data-action="confirm-skill-action">确认</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop hidden" id="skillInstallConfirmModal">
+    <section class="skill-confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="skillInstallConfirmTitle">
+      <div class="confirm-icon" data-svg-icon="shield-alert" aria-hidden="true"></div>
+      <div class="confirm-copy">
+        <h2 id="skillInstallConfirmTitle">确认安装技能</h2>
+        <p id="skillInstallConfirmText"></p>
+        <ul class="skill-risk-list" id="skillInstallRiskList"></ul>
+        <label class="check-row">
+          <input type="checkbox" id="skillInstallConfirmCheck">
+          <span id="skillInstallConfirmLabel">我已核对来源并确认继续</span>
+        </label>
+      </div>
+      <div class="modal-actions confirm-actions">
+        <button class="secondary-button" type="button" data-action="cancel-skill-install-confirm">取消</button>
+        <button class="primary-button" id="skillInstallConfirmButton" type="button" data-action="confirm-online-skill-install" disabled>确认安装</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast hidden" id="toast"></div>
+
+  <script src="./vendor/marked.umd.js"></script>
+  <link rel="stylesheet" href="./requirements.css">
+  <link rel="stylesheet" href="./workspace-modules.css">
+  <style>#requirementNav[hidden]{display:none}</style>
+  <script src="./requirements.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "upstreamVersion": "1.0.0-rc1",
+  "adapterVersion": "1.0.2",
+  "schemaVersion": "1.0.0",
+  "migrationVersion": 1,
+  "productVersion": "2.3.0.1",
+  "capabilityVersion": "2.3.0.1-7ecbdb5af926",
+  "buildHash": "758458a95298c907146843968c88b1a28d982c54f0d244b32b30f83b66984f82",
+  "files": {
+    "upstream/.gitattributes": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+    "upstream/agents/openai.yaml": "febb88926259ab37003b4e20d2e5339144cb9ae3110e7e875981f0c96a6c16a8",
+    "upstream/assets/requirement-analysis-brief.md": "bb82e3c95c273392e34291b3264d96d0c08e5dafd78b2eec6b97bba74a034b90",
+    "upstream/README.md": "c5210bc00fd7dd9156f3531aacf85dc35579265bccb1ba257d25bc7e4d6134ff",
+    "upstream/references/output-schema.md": "7bddf4f3e601fd4a0ca487c55c1a3cbc23bec09b7ccf5be70eb7f622a90bdab8",
+    "upstream/references/project-context-retrieval.md": "0476a632574ff95adc42bfd65e33935073717732c59c1e6b60707a2a638caf2d",
+    "upstream/references/quality-gates.md": "597d5a8b038ecdc65f7deaede4035358329b20566a932e533f7152f291229f80",
+    "upstream/references/questioning-engine.md": "a399abcf9f1c691ec57fd425e34cc9710b5ec820cda6cbe8c8cd5cdfb2a90a45",
+    "upstream/SKILL.md": "dd2aef0e0c755970200855a1b8ecc45231040e5edc3eda3c133e86e4e57a3d5c",
+    "upstream/清单.txt": "f8477bb424c5d2ff86b5f17cf1e351670adfaeca85b70216cb982515b7cd554e",
+    "schemas/input.json": "546131cf88e705a3f86f07c2871bc13f5da0a84c45c90448099add51a5aa5d1a",
+    "schemas/output.json": "82e27578862ca18f499e98810b916bdcb660d30966d00bff0eb0c8d60949fede",
+    "docs/AI_CAPABILITIES.md": "0484b8fa895539479083a673be55fe7cf3a95ec2f738e4e007046aa952083cbb",
+    "adapter.md": "883c91d07b37633b9fdb17afb63dc59886f862c4aebd0a15083100013fe86d9a",
+    "contract.js": "cccbc45bfad4d36492c613e239fe4df80c1e36c6e3c6eb829bae6e868273ad46",
+    "resources.js": "43908db5aafae87a92dc63f737022e9729b03695002449a9039dc19693024102",
+    "presentation.js": "ddfbc0af021c0097d30f8698ee5c93566b6a10ecd9f2c07bc88d50e85c105a4a",
+    "model.js": "02fd3640e5e33fdf6b9fe4aaa82d73dc92898d5ebe58636fd23afc634a907186",
+    "capabilities.json": "5bd0659d5bac2c7f5804d9336e4b53fc91569b36099cb393e8b1a6013d044d43",
+    "capability-source.json": "af2673bb784f47074ed034e3bc8a8ccd175f52740b7f254a5939a699e9be6cf7"
+  }
+}

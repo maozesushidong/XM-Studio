@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>XMAI Studio 管理后台</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./admin/v11.css?v=20260901-admin-context">
+  <link rel="stylesheet" href="./admin/v11-theme.css?v=20260901-admin-context">
+  <link rel="stylesheet" href="./admin/requirements.css">
+  <style>#requirementAdminNav[hidden]{display:none}</style>
+</head>
+<body>
+  <div class="admin-shell">
+    <main class="workspace">
+      <section class="app-frame">
+        <section class="app-header">
+          <div class="app-identity"><img class="app-brand-icon" src="./admin/v11-icon.png" alt=""><div><strong>XMAI Studio</strong><small>企业 AI 工作平台</small></div></div>
+          <button id="refreshButton" class="icon-button top-refresh" type="button" title="刷新" aria-label="刷新">↻</button>
+          <div class="page-context" aria-hidden="true"><small id="pageEyebrow">运营概况</small><strong id="pageTitle">首页</strong></div>
+        </section>
+
+        <nav id="navigation" class="section-navigation" aria-label="XMAI Studio 管理功能">
+          <button class="active" data-view="overview">首页</button>
+          <button data-view="skills">技能管理<i id="skillBadge"></i></button>
+          <button data-view="users">用户管理</button>
+          <button data-view="requirements" id="requirementAdminNav" hidden>需求管理</button>
+          <button data-view="config">基础配置</button>
+          <button data-view="releases">版本发布</button>
+        </nav>
+
+        <div id="statusBar" class="status-bar">正在读取管理数据...</div>
+        <section id="content" class="content" aria-live="polite"></section>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="editorDialog">
+    <form method="dialog" id="editorForm">
+      <header><div><p id="editorEyebrow">编辑</p><h2 id="editorTitle">编辑内容</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="关闭">×</button></header>
+      <div id="editorFields" class="dialog-fields"></div>
+      <footer><button class="secondary" type="button" data-close-dialog>取消</button><button class="primary" type="submit" id="editorSubmit">保存</button></footer>
+    </form>
+  </dialog>
+
+  <dialog id="detailDialog" class="detail-dialog">
+    <form method="dialog">
+      <header><div><p>技能审核详情</p><h2 id="detailTitle">技能详情</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="关闭">×</button></header>
+      <div id="detailContent" class="detail-content"></div>
+      <footer id="detailActions"><button class="secondary" value="cancel">关闭</button></footer>
+    </form>
+  </dialog>
+
+  <dialog id="userDialog" class="user-dialog">
+    <form method="dialog">
+      <header><div><h2 id="userDetailTitle">用户详情</h2><p id="userDetailIdentifier">账号标识：-</p></div><button class="icon-button" type="button" data-close-dialog aria-label="关闭">×</button></header>
+      <div id="userDetailContent" class="detail-content"></div>
+      <footer><button class="secondary" type="button" data-close-dialog>关闭</button></footer>
+    </form>
+  </dialog>
+
+  <dialog id="directPublishDialog" class="direct-publish-dialog">
+    <form method="dialog" id="directPublishForm">
+      <header><div><p>跳过员工审批流程</p><h2>直接发布企业技能</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="关闭">×</button></header>
+      <div class="dialog-fields">
+        <div class="source-tabs" role="tablist" aria-label="技能来源">
+          <button class="tab-button active" type="button" data-direct-source="zip">ZIP 压缩包</button>
+          <button class="tab-button" type="button" data-direct-source="folder">本地文件夹</button>
+          <button class="tab-button" type="button" data-direct-source="github">公开 GitHub</button>
+        </div>
+        <section class="source-panel" data-source-panel="zip"><label class="field"><span>标准技能 ZIP 包</span><input id="directZipFile" type="file" accept=".zip"></label></section>
+        <section class="source-panel folder-source-panel" data-source-panel="folder" hidden>
+          <div class="folder-picker-guidance"><strong>请选择整个技能文件夹</strong><span>Windows 选择窗口只显示文件夹，内部的 SKILL.md（不区分大小写）和其他文件不会在该窗口中显示。进入技能目录后直接点击“上传”，返回本页面即可查看已读取文件。</span></div>
+          <label class="field"><span>技能文件夹</span><input id="directFolderFiles" type="file" webkitdirectory directory multiple></label>
+          <div id="directFolderStatus" class="file-selection-status" role="status">尚未选择文件夹</div>
+          <section id="directFolderPreview" class="folder-file-preview" hidden><header><strong>已读取文件</strong><span id="directFolderFileCount">0 个</span></header><ul id="directFolderFileList"></ul></section>
+        </section>
+        <section class="source-panel" data-source-panel="github" hidden><label class="field"><span>公开 GitHub 仓库或目录地址</span><input id="directGithubUrl" type="url" placeholder="https://github.com/owner/repo 或 /tree/main/skill-dir"></label></section>
+        <label class="field"><span>企业技能名称</span><input id="directEnterpriseName" maxlength="80" required placeholder="公司技能库中展示的唯一名称"></label>
+        <label class="field"><span>企业分类</span><select id="directCategory" required></select></label>
+        <div class="field"><span>企业标签（至少选择一个）</span><input id="directTagSearch" type="search" placeholder="搜索标签"><div id="directTagOptions" class="tag-options"></div></div>
+        <label class="field"><span>新增标签（可选，使用逗号分隔）</span><input id="directNewTags" placeholder="例如：会议纪要, 管理工具"></label>
+        <label class="check-row"><input id="directRiskAcknowledged" type="checkbox"><span>如检测到脚本、命令或网络访问，我已核对风险并同意发布</span></label>
+        <div id="directPublishProgress" class="inline-progress" hidden><progress max="100" value="0"></progress><small>正在准备技能包</small></div>
+      </div>
+      <footer><button class="secondary" type="button" data-close-dialog>取消</button><button class="primary" type="submit">校验并发布</button></footer>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" hidden></div>
+  <script src="./admin/jszip.min.js?v=20260901-admin-context"></script>
+  <script src="./admin/requirements.js"></script>
+  <script src="./admin/v11.js?v=20260901-admin-username"></script>
+</body>
+</html>

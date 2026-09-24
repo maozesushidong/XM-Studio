@@ -1,0 +1,89 @@
+name: xianma-update-service
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: xianma-update-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: xianma_studio
+      POSTGRES_USER: xianma_studio
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - xianma_update_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U xianma_studio -d xianma_studio"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  xianma-update-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: xianma-update-service:2.0.0
+    container_name: xianma-update-service
+    working_dir: /app
+    command: ["node", "server.js"]
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8080
+      UPDATE_DATA_ROOT: /data
+      UPDATE_ADMIN_TOKEN: ${UPDATE_ADMIN_TOKEN}
+      UPDATE_SIGNING_PRIVATE_KEY_PATH: /run/secrets/update-signing-private.pem
+      UPDATE_PUBLIC_BASE_URL: ${UPDATE_PUBLIC_BASE_URL}
+      UPDATE_NEXT_INTERNAL_VERSION: ${UPDATE_NEXT_INTERNAL_VERSION:-2.0.0}
+      DATABASE_URL: postgresql://xianma_studio:${POSTGRES_PASSWORD}@postgres:5432/xianma_studio
+      TELEMETRY_ALLOWED_CORP_ID: ${TELEMETRY_ALLOWED_CORP_ID:-}
+      TELEMETRY_ONLINE_WINDOW_MS: ${TELEMETRY_ONLINE_WINDOW_MS:-180000}
+      TELEMETRY_EXCLUDED_IDENTIFIERS: ${TELEMETRY_EXCLUDED_IDENTIFIERS:-}
+      TELEMETRY_EXCLUDED_NAMES: ${TELEMETRY_EXCLUDED_NAMES:-}
+      MAPMS_BASE_URL: ${MAPMS_BASE_URL:-http://47.96.184.148}
+      MAPMS_API_KEY: ${MAPMS_API_KEY:-}
+      MAPMS_API_SECRET: ${MAPMS_API_SECRET:-}
+      MAPMS_USER_REMARK: ${MAPMS_USER_REMARK:-桌面端注册}
+      MAPMS_ADMIN_BASE_URL: ${MAPMS_ADMIN_BASE_URL:-}
+      MAPMS_ADMIN_USERNAME: ${MAPMS_ADMIN_USERNAME:-}
+      MAPMS_ADMIN_PASSWORD: ${MAPMS_ADMIN_PASSWORD:-}
+      DINGTALK_APP_KEY: ${DINGTALK_APP_KEY:-}
+      DINGTALK_APP_SECRET: ${DINGTALK_APP_SECRET:-}
+      ADMIN_FRAME_ANCESTORS: "${ADMIN_FRAME_ANCESTORS:-'self'}"
+      MODEL_GATEWAY_GPT_BASE_URL: ${MODEL_GATEWAY_GPT_BASE_URL:-}
+      MODEL_GATEWAY_GPT_API_KEY: ${MODEL_GATEWAY_GPT_API_KEY:-}
+      MODEL_GATEWAY_GPT_DEFAULT_MODEL: ${MODEL_GATEWAY_GPT_DEFAULT_MODEL:-gpt-5.6-luna}
+      MODEL_GATEWAY_FALLBACK_BASE_URL: ${MODEL_GATEWAY_FALLBACK_BASE_URL:-}
+      MODEL_GATEWAY_FALLBACK_API_KEY: ${MODEL_GATEWAY_FALLBACK_API_KEY:-}
+      MODEL_GATEWAY_FALLBACK_MODEL: ${MODEL_GATEWAY_FALLBACK_MODEL:-}
+      MODEL_GATEWAY_FALLBACK_SUPPORTS_TOOLS: ${MODEL_GATEWAY_FALLBACK_SUPPORTS_TOOLS:-0}
+      MODEL_GATEWAY_ERROR_FALLBACK_BASE_URL: ${MODEL_GATEWAY_ERROR_FALLBACK_BASE_URL:-}
+      MODEL_GATEWAY_ERROR_FALLBACK_API_KEY: ${MODEL_GATEWAY_ERROR_FALLBACK_API_KEY:-}
+      MODEL_GATEWAY_ERROR_FALLBACK_TEXT_MODEL: ${MODEL_GATEWAY_ERROR_FALLBACK_TEXT_MODEL:-deepseek-v4-pro}
+      MODEL_GATEWAY_ERROR_FALLBACK_VISION_MODEL: ${MODEL_GATEWAY_ERROR_FALLBACK_VISION_MODEL:-deepseek-v4-flash-vision-exp}
+      MODEL_GATEWAY_ERROR_FALLBACK_SUPPORTS_TOOLS: ${MODEL_GATEWAY_ERROR_FALLBACK_SUPPORTS_TOOLS:-1}
+      MODEL_GATEWAY_GPT_MAX_CONCURRENCY: ${MODEL_GATEWAY_GPT_MAX_CONCURRENCY:-14}
+      ENABLE_COMPANY_SKILL_PLATFORM: "${ENABLE_COMPANY_SKILL_PLATFORM:-1}"
+      COMPANY_SKILL_ADMIN_PUBLIC: "${COMPANY_SKILL_ADMIN_PUBLIC:-1}"
+      COMPANY_SKILL_ADMIN_PREVIEW_PATH: ${COMPANY_SKILL_ADMIN_PREVIEW_PATH:-}
+      ENABLE_V11_ADMIN_UI: "${ENABLE_V11_ADMIN_UI:-1}"
+      V11_MANAGEMENT_PUBLIC: "${V11_MANAGEMENT_PUBLIC:-1}"
+      UPDATE_MAX_UPLOAD_BYTES: 2147483648
+      UPDATE_UPLOAD_CHUNK_BYTES: 8388608
+      UPDATE_UPLOAD_SESSION_MAX_AGE_MS: 172800000
+    ports:
+      - "127.0.0.1:18091:8080"
+    volumes:
+      - ./server.js:/app/server.js:ro
+      - ./company-skills.js:/app/company-skills.js:ro
+      - ./v11-platform.js:/app/v11-platform.js:ro
+      - ./v11-store.js:/app/v11-store.js:ro
+      - ./public:/app/public:ro
+      - ./data:/data
+      - ./secrets:/run/secrets:ro
+
+volumes:
+  xianma_update_postgres:
+    name: xianma_update_postgres

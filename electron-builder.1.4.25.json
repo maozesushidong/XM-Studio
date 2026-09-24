@@ -1,0 +1,33 @@
+{
+  "appId": "com.xianma.centaur.desktop",
+  "productName": "先马智能体",
+  "icon": "build/icon.png",
+  "afterPack": "scripts/after-pack.js",
+  "directories": {
+    "output": "dist-1.4.25"
+  },
+  "files": [
+    "electron/**/*",
+    "renderer/**/*"
+  ],
+  "extraResources": [
+    {
+      "from": "build/runtime-archive",
+      "to": "runtime-archive",
+      "filter": ["**/*"]
+    },
+    {
+      "from": "build/runtime-tools",
+      "to": "runtime-tools",
+      "filter": ["**/*"]
+    },
+    {
+      "from": "build/node-runtime/node-v24.18.0-win-x64",
+      "to": "node-runtime",
+      "filter": ["**/*"]
+    }
+  ],
+  "win": {
+    "icon": "build/icon.ico"
+  }
+}
