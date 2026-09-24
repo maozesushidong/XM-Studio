@@ -1,0 +1,24 @@
+{
+    "apiBaseUrl":  "http://47.251.247.220/v1",
+    "model":  "gpt-5.6-luna",
+    "imageModel":  "gpt-image-2",
+    "models":  [
+                   {
+                       "label":  "5.6 Luna",
+                       "value":  "gpt-5.6-luna"
+                   },
+                   {
+                       "label":  "5.6 Sol",
+                       "value":  "gpt-5.6-sol"
+                   },
+                   {
+                       "label":  "5.6 Terra",
+                       "value":  "gpt-5.6-terra"
+                   },
+                   {
+                       "label":  "5.5",
+                       "value":  "gpt-5.6-sol"
+                   }
+               ],
+    "apiKey":  "sk-5fba355c672d13c3afb237e0918def61045eb56554835dccc20d5195945110b8"
+}

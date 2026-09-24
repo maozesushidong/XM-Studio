@@ -17,3 +17,6 @@ build/runtime-archive/** filter=lfs diff=lfs merge=lfs -text
 build/node-runtime/** filter=lfs diff=lfs merge=lfs -text
 build/runtime-tools/**/*.exe filter=lfs diff=lfs merge=lfs -text
 build/runtime-tools/**/*.bin filter=lfs diff=lfs merge=lfs -text
+build/runtime-tools/**/*.dll filter=lfs diff=lfs merge=lfs -text
+build/tools/InnoSetup/** filter=lfs diff=lfs merge=lfs -text
+config/plaintext/** -text

@@ -23,6 +23,13 @@ build/runtime-tools/*
 !build/v11-preview-signing-public.pem
 !build/v11-preview-build.json
 !build/v11-preview-deployment.json
+!build/installer-config/
+!build/installer-config/**
+!build/tools/
+build/tools/*
+!build/tools/InnoSetup/
+!build/tools/InnoSetup/**
+build/tools/InnoSetup/unins*
 
 # Local browser and test output
 .playwright-cli/
@@ -39,14 +46,17 @@ workorder-home.yml
 !.env.example
 *.key
 *private*.pem
-electron/bundled-ai-credential.json
-electron/bundled-ai-key-part.json
-electron/bundled-dingtalk-credential.json
-electron/bundled-dingtalk-key-part.json
+# The owner explicitly requested these reproducibility credentials in Git.
+!electron/bundled-ai-credential.json
+!electron/bundled-ai-key-part.json
+!electron/bundled-dingtalk-credential.json
+!electron/bundled-dingtalk-key-part.json
+!config/plaintext/preview-signing-private.pem
 update-service/data/
 update-service/uploads/
 update-service/releases/
 update-service/.publish-upload-state.json
+update-service/deploy/v11-preview/runtime.env
 mit/private.py
 
 # Installers and archives must use the release/update server
@@ -58,6 +68,11 @@ mit/private.py
 *.7z
 !release-assets/
 !release-assets/**
+!build/runtime-archive/**
+!build/runtime-tools/**
+!build/node-runtime/**
+!build/tools/InnoSetup/**
+build/tools/InnoSetup/unins*
 
 # Editor and OS state
 __pycache__/

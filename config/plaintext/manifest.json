@@ -1,0 +1,33 @@
+{
+  "exportedAt": "2026-09-24T06:36:08.217058+00:00",
+  "previewBaseUrl": "http://47.96.184.148/studio-v11-CWyTWq7cBtoNl7dztMDpwHeirAXE-k59F-5DL4uFcYM",
+  "containerImage": "xianma-v11-preview-service",
+  "readOnlyServerExport": true,
+  "expiry": "Managed externally by the repository owner; not verified by this export.",
+  "files": [
+    {
+      "file": "client-credentials.json",
+      "sha256": "90b7dda30f1280eefd1056c6db65af92e1e42019a91394cc5fd3c6f3577ba8f8"
+    },
+    {
+      "file": "deployment-access.json",
+      "sha256": "1eddbf7a4a984d0bbfa85e809c5a14fd777b10a02d836ae90653de51a73e8ee0"
+    },
+    {
+      "file": "preview-compose.env",
+      "sha256": "ed1dde6a224305aa361d6693940760aa53fcc83a0d02a5578aa48a8dcb1d7458"
+    },
+    {
+      "file": "preview-postgres-environment.json",
+      "sha256": "69c781916a8726d23b2258d1fdd13e74bac6884f524a96e1bc4142853d2cacdf"
+    },
+    {
+      "file": "preview-service-environment.json",
+      "sha256": "c278895ba9c2993f59388c3d5aaad774c18d4d8ab8e55bcd2afa3893d7b7ea2e"
+    },
+    {
+      "file": "preview-signing-private.pem",
+      "sha256": "d4f5bd3485070e767d4833d0ffe9c821bd9c5eeb46c8a3a3c7ff567d3472ea8f"
+    }
+  ]
+}

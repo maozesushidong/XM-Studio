@@ -20,10 +20,12 @@ http://47.96.184.148/studio-v11-CWyTWq7cBtoNl7dztMDpwHeirAXE-k59F-5DL4uFcYM
 
 ## 从源码复现
 
-环境要求：Windows x64、Node.js、npm、Python、Inno Setup 和 Git LFS。
+环境要求：Windows x64、Node.js、npm 和 Git LFS。构建使用的 Inno Setup 编译器与配置随仓库提供；只读刷新服务端配置时另外需要 Python、paramiko 和 cryptography。
 
 ```powershell
 git lfs install
+git lfs pull
+node scripts/verify-replication-handoff.js
 npm ci
 npm run test:syntax
 npm run build:dir
@@ -61,6 +63,8 @@ http://47.96.184.148/studio-v11-CWyTWq7cBtoNl7dztMDpwHeirAXE-k59F-5DL4uFcYM/admi
 
 ## 凭证说明
 
-仓库不保存服务器密码、模型 API Key、钉钉密钥、数据库密码或 GitHub 登录密码。客户端和服务端的测试功能可以直接使用已部署的测试环境；需要自行部署服务端时，请通过环境变量或部署平台注入凭证，不要把凭证写入源代码。
+按仓库所有者明确要求，项目复现所需的真实配置已纳入版本管理。`config/plaintext/` 提供服务器登录信息、客户端解密凭证、测试服务端环境变量、数据库配置和测试签名私钥；`electron/` 保留原始四个加密凭证及分片文件。目录和使用方法见 [凭证与配置说明](config/plaintext/README.md)。
+
+这些配置是导出时的快照；有效期由所有者在外部服务中管理，本仓库不延长有效期。现有测试安装包未被修改。
 
 正式服务端和正式客户端不属于这个测试仓库。

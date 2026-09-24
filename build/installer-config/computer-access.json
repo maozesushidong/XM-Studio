@@ -1,0 +1,5 @@
+{
+  "schemaVersion": 1,
+  "computerAccessMode": "full",
+  "description": "full=完全访问；confirm-dangerous=危险操作确认；read-only=只读"
+}

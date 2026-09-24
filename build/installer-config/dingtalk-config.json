@@ -1,0 +1,14 @@
+{
+  "appId": "f457a9a8-eb4d-4b93-bb8c-29f58981e2df",
+  "agentId": "4782339784",
+  "clientId": "dingvunduflvc3rjexmv",
+  "clientSecret": "",
+  "corpId": "ding88e5500d20d2f98e",
+  "redirectUri": "http://127.0.0.1:17891/dingtalk/callback",
+  "scope": "openid corpid",
+  "prompt": "consent",
+  "loginMode": "embedded",
+  "embeddedQr": true,
+  "useSystemBrowser": false,
+  "enforceCorpId": true
+}
